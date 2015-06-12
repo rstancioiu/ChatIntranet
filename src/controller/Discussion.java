@@ -7,6 +7,8 @@ import view.OngletDiscussion;
 
 import java.awt.Color;
 
+import java.awt.Dimension;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -62,7 +64,7 @@ public class Discussion extends JTextPane implements Runnable {
      * @param od
      */
     public Discussion(InfoServeur infos, OngletDiscussion od) {
-   
+        this.setSize(new Dimension(450, 300));
         doc = (StyledDocument) this.getDocument();
         this.ongletDiscussion = od;
         this.setEditable(false);

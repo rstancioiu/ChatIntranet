@@ -62,61 +62,82 @@ public class Message {
         if (string.charAt(0) == '#')
             type = Integer.parseInt(string.substring(1, 2));
         if (type != MESSAGE_PRIVE && type != TRANSFERT_FICHIER && type != TRANSFERT_ANNULE) {
-            for (int i = 3; i < string.length(); i++) {
-                if (string.charAt(i) == '~') {
-                    expediteur = string.substring(3, i);
-                    corps = string.substring(i + 1);
-                }
+            int lengthExpediteur=0;
+            int lengthCorps=0;
+            int i=3;
+            while(string.charAt(i)!='#') {
+                lengthExpediteur = lengthExpediteur*10 +( string.charAt(i)-'0');
+                i++;
             }
+            i++;
+            while(string.charAt(i)!='#') {
+                lengthCorps = lengthCorps + (string.charAt(i)-'0');
+                i++;
+            }
+            expediteur = string.substring(i+1,i+lengthExpediteur+1);
+            corps = string.substring(i+lengthExpediteur+2);
         } else if (type == MESSAGE_PRIVE || type == TRANSFERT_ANNULE) {
-            int j = 0;
-            int k = 0;
-            for (int i = 3; i < string.length(); i++) {
-                if (string.charAt(i) == '#') {
-                    if (k == 0) {
-                        destinataire = string.substring(3, i);
-                        j = i + 1;
-                        k++;
-                    }
-                }
-                if (string.charAt(i) == '~') {
-                    expediteur = string.substring(j, i);
-                    corps = string.substring(i + 1);
-                    nomFichier=string.substring(i+1);
-                }
+            int lengthDestinataire = 0;
+            int lengthExpediteur=0;
+            int lengthCorps=0;
+            int i=3;
+            while(string.charAt(i)!='#') {
+                lengthDestinataire = lengthDestinataire*10 +( string.charAt(i)-'0');
+                i++;
             }
+            i++;
+            while(string.charAt(i)!='#') {
+                lengthExpediteur = lengthExpediteur*10 +( string.charAt(i)-'0');
+                i++;
+            }
+            i++;
+            while(string.charAt(i)!='#') {
+                lengthCorps = lengthCorps + (string.charAt(i)-'0');
+                i++;
+            }
+            destinataire = string.substring(i+1, i+1+lengthDestinataire);
+            i+=lengthDestinataire+1;
+            expediteur = string.substring(i+1, i+1+lengthExpediteur);
+            i+=lengthExpediteur+1;
+            corps = string.substring(i+1);
+            nomFichier=string.substring(i+1);
         } else if (type == TRANSFERT_FICHIER) {
-            int p = 0;
-            int j = 0;
-            for (int i = 3; i < string.length(); i++) {
-                if (string.charAt(i) == '#') {
-                    destinataire = string.substring(3, i);
-                    j = i + 1;
-                }
-
-                if (string.charAt(i) == '~') {
-                    if (p == 0) {
-                        expediteur = string.substring(j, i);
-                        j = i + 1;
-                        p++;
-                    }
-                    else if (p == 1) {
-                        adresse = string.substring(j, i);
-                        j = i + 1;
-                        p++;
-                    }
-                    else if (p == 2) {
-                        port = Integer.parseInt(string.substring(j, i));
-                        j = i + 1;
-                        p++;
-                    }
-                    else if (p == 3) {
-                        tailleFichier = Integer.parseInt(string.substring(j, i));
-                        nomFichier = string.substring(i + 1);
-                        p++;
-                    }
-                }
+            int lengthDestinataire = 0;
+            int lengthExpediteur=0;
+            int lengthAdresse=0;
+            int i=3;
+            while(string.charAt(i)!='#') {
+                lengthDestinataire = lengthDestinataire*10 +( string.charAt(i)-'0');
+                i++;
             }
+            i++;
+            while(string.charAt(i)!='#') {
+                lengthExpediteur = lengthExpediteur*10 +( string.charAt(i)-'0');
+                i++;
+            }
+            i++;
+            while(string.charAt(i)!='#') {
+                lengthAdresse = lengthAdresse + (string.charAt(i)-'0');
+                i++;
+            }
+            destinataire = string.substring(i+1, i+1+lengthDestinataire);
+            i+=lengthDestinataire+2;
+            expediteur = string.substring(i,lengthExpediteur+i);
+            i+=lengthExpediteur+1;
+            adresse = string.substring(i,lengthAdresse+i);
+            port=0;
+            i+=lengthAdresse+1;
+            while(string.charAt(i)!='#') {
+                port=port*10+(string.charAt(i)-'0');
+                i++;
+            }
+            tailleFichier=0;
+            i++;
+            while(string.charAt(i)!='#') {
+                tailleFichier=tailleFichier*10+(string.charAt(i)-'0');
+                i++;
+            }
+            nomFichier = string.substring(i + 1);
         }
     }
 
@@ -159,12 +180,13 @@ public class Message {
      */
     public String toString() {
         if ((type != MESSAGE_PRIVE) && (type != TRANSFERT_FICHIER) && (type != TRANSFERT_ANNULE))
-            return "#" + type + "#" + expediteur + "~" + corps;
+            return "#" + type + "#" + expediteur.length()+ "#" + ((corps==null)?0:corps.length()) + "#" + expediteur + "#" + corps;
         else if (type == MESSAGE_PRIVE||type == TRANSFERT_ANNULE)
-            return "#" + type + "#" + destinataire + "#" + expediteur + "~" + corps;
+            return "#" + type + "#" + destinataire.length() + "#"+ expediteur.length() +"#" +((corps==null)?0:corps.length())+"#"
+                   + destinataire + "#" + expediteur + "#" + corps;
         else
-            return "#" + type + "#" + destinataire + "#" + expediteur + "~" + adresse + '~' + port + '~' +
-                tailleFichier + '~' + nomFichier;
+            return "#" + type + "#" +destinataire.length()+ "#" + expediteur.length() + "#" +((adresse==null)?0:adresse.length())  + "#" + 
+                   destinataire + "#" + expediteur + "#" + adresse + '#' + port + '#' + tailleFichier + '#' + nomFichier;
     }
 
     /**
