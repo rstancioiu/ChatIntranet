@@ -76,6 +76,8 @@ public class Message {
             }
             expediteur = string.substring(i+1,i+lengthExpediteur+1);
             corps = string.substring(i+lengthExpediteur+2);
+            if(lengthExpediteur==0)
+                expediteur=null;
         } else if (type == MESSAGE_PRIVE || type == TRANSFERT_ANNULE) {
             int lengthDestinataire = 0;
             int lengthExpediteur=0;
@@ -101,6 +103,10 @@ public class Message {
             i+=lengthExpediteur+1;
             corps = string.substring(i+1);
             nomFichier=string.substring(i+1);
+            if(lengthDestinataire==0)
+                destinataire=null;
+            if(lengthExpediteur==0)
+                expediteur=null;
         } else if (type == TRANSFERT_FICHIER) {
             int lengthDestinataire = 0;
             int lengthExpediteur=0;
@@ -120,13 +126,13 @@ public class Message {
                 lengthAdresse = lengthAdresse + (string.charAt(i)-'0');
                 i++;
             }
-            destinataire = string.substring(i+1, i+1+lengthDestinataire);
+            destinataire = string.substring(i+1, i+2+lengthDestinataire);
             i+=lengthDestinataire+2;
-            expediteur = string.substring(i,lengthExpediteur+i);
-            i+=lengthExpediteur+1;
-            adresse = string.substring(i,lengthAdresse+i);
+            expediteur = string.substring(i+1,lengthExpediteur+i+1);
+            i+=lengthExpediteur+2;
+            adresse = string.substring(i+1,lengthAdresse+i+1);
             port=0;
-            i+=lengthAdresse+1;
+            i+=lengthAdresse+2;
             while(string.charAt(i)!='#') {
                 port=port*10+(string.charAt(i)-'0');
                 i++;
@@ -138,6 +144,10 @@ public class Message {
                 i++;
             }
             nomFichier = string.substring(i + 1);
+            if(lengthDestinataire==0)
+                destinataire=null;
+            if(lengthExpediteur==0)
+                expediteur=null;
         }
     }
 
@@ -180,9 +190,10 @@ public class Message {
      */
     public String toString() {
         if ((type != MESSAGE_PRIVE) && (type != TRANSFERT_FICHIER) && (type != TRANSFERT_ANNULE))
-            return "#" + type + "#" + expediteur.length()+ "#" + ((corps==null)?0:corps.length()) + "#" + expediteur + "#" + corps;
+            return "#" + type + "#" + ((expediteur==null)?0:expediteur.length())+ "#" + 
+                   ((corps==null)?0:corps.length()) + "#" + expediteur + "#" + corps;
         else if (type == MESSAGE_PRIVE||type == TRANSFERT_ANNULE)
-            return "#" + type + "#" + destinataire.length() + "#"+ expediteur.length() +"#" +((corps==null)?0:corps.length())+"#"
+            return "#" + type + "#" + ((destinataire==null)?0:destinataire.length()) + "#"+ expediteur.length() +"#" +((corps==null)?0:corps.length())+"#"
                    + destinataire + "#" + expediteur + "#" + corps;
         else
             return "#" + type + "#" +destinataire.length()+ "#" + expediteur.length() + "#" +((adresse==null)?0:adresse.length())  + "#" + 
