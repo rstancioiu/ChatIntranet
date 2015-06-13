@@ -123,14 +123,15 @@ public class Message {
             }
             i++;
             while(string.charAt(i)!='#') {
-                lengthAdresse = lengthAdresse + (string.charAt(i)-'0');
+                lengthAdresse = lengthAdresse*10 + (string.charAt(i)-'0');
                 i++;
             }
-            destinataire = string.substring(i+1, i+2+lengthDestinataire);
-            i+=lengthDestinataire+2;
+            destinataire = string.substring(i+1, i+1+lengthDestinataire);
+            i+=lengthDestinataire+1;
             expediteur = string.substring(i+1,lengthExpediteur+i+1);
-            i+=lengthExpediteur+2;
+            i+=lengthExpediteur+1;
             adresse = string.substring(i+1,lengthAdresse+i+1);
+            System.out.println(lengthAdresse);
             port=0;
             i+=lengthAdresse+2;
             while(string.charAt(i)!='#') {

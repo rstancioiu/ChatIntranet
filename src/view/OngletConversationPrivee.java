@@ -128,8 +128,8 @@ public class OngletConversationPrivee extends JPanel {
         this.setSize(new Dimension(400, 300));
         quitter.setText("Fermer");
         zoneTexte.setEditable(false);
-        panelHaut.add(quitter, BorderLayout.CENTER);
-        panelHaut.add(boutonEnvFichier, BorderLayout.CENTER);
+        panelHaut.add(quitter, BorderLayout.WEST);
+        panelHaut.add(boutonEnvFichier, BorderLayout.WEST);
         this.add(panelHaut, BorderLayout.PAGE_START);
         scrollConversation = new JScrollPane(zoneTexte);
         scrollConversation.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);

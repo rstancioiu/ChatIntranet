@@ -274,7 +274,5 @@ public class Serveur implements Runnable {
     
     // Constantes
     public static final int PORT_DE_BROADCAST = 13371;
-    public static final String PW_ACCEPTED = "wowsuchpassword~~";
-    public static final String DISCOVERY = "youwutm8~~";
 }
 

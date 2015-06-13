@@ -30,6 +30,8 @@ public class RecevoirBroadcast implements Runnable {
     private String motDePasse;
     private String messageRecu;
     private boolean running = true;
+    public static final String PW_ACCEPTED = "wowsuchpassword~~";
+    public static final String DISCOVERY = "youwutm8~~";
 
 
     /**
@@ -68,10 +70,10 @@ public class RecevoirBroadcast implements Runnable {
                 if (messageRecu.equals(motDePasse + "~~") &&
                     infos.getType() == "prive") { //comparaison du message recu aux motDePasse
                     packetReponseMdp =
-                        new DatagramPacket(Serveur.PW_ACCEPTED.getBytes(), (Serveur.PW_ACCEPTED.getBytes()).length,
+                        new DatagramPacket(PW_ACCEPTED.getBytes(), (PW_ACCEPTED.getBytes()).length,
                                            adresseClient, packetRecu.getPort());
                     socketUdp.send(packetReponseMdp);
-                } else if (messageRecu.equals(Serveur.DISCOVERY)) {
+                } else if (messageRecu.equals(DISCOVERY)) {
                     packetReponseInfos =
                         new DatagramPacket((infos.transfertDonnees()).getBytes(),
                                            ((infos.transfertDonnees()).getBytes()).length, adresseClient,

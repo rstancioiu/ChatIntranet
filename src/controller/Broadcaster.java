@@ -23,6 +23,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
+import view.ListeServeur;
+
 /**
  * Class Broadcaster permet l'envoi de broadcast et du mot de passe insere
  * par le client vers le serveur. On utilise des Sockets de type UDP, en
@@ -40,12 +42,17 @@ import javax.swing.SwingUtilities;
  * @see DatagramPacket
  * @see DatagramSocket
  */
-public class Broadcaster extends JList implements Runnable {
-    
+
+public class Broadcaster implements Runnable {
+    @SuppressWarnings("compatibility:8646387119641877285")
+    private static final long serialVersionUID = 1L;
+
     private DatagramPacket packetBroadcast; //packet broadcaste
     private DatagramPacket packetReponse; //packet recu
     private DatagramSocket socket; // socket de type UDP
-    private byte[] data = Serveur.DISCOVERY.getBytes(); //message envoye en tableau de bytes
+    private static final String PW_ACCEPTED = "wowsuchpassword~~";
+    private static final String DISCOVERY = "youwutm8~~";
+    private byte[] data = DISCOVERY.getBytes(); //message envoye en tableau de bytes
     
     /*timers utilise pour updater la jliste*/
     private Timer timer;
@@ -62,12 +69,10 @@ public class Broadcaster extends JList implements Runnable {
     private String accepteMdp;
     /*arrayList d'InfoServeur qui est ajoute a la jliste*/
     
-    private ArrayList<InfoServeur> liste = new ArrayList<InfoServeur>();
     private Boolean running = true;
-    private Broadcaster broadcast;
     private OngletRooms ongletroom;
     private InfoServeur infos;
-    private DefaultListModel model;
+    private ListeServeur listeServeur;
     
 
     /**
@@ -75,13 +80,10 @@ public class Broadcaster extends JList implements Runnable {
      * et les broadcasts envoyes et recus.
      * @param or
      */
-    public Broadcaster(OngletRooms or) throws IOException {
-        model = new DefaultListModel();
-        this.setModel(model);
-        this.setFont(new Font("Arial", Font.BOLD, 14));
+    public Broadcaster(OngletRooms or,ListeServeur listeServeur) throws IOException {
         this.ongletroom = or;
-        broadcast = this;
         connectionAccepte = false;
+        this.listeServeur=listeServeur;
         /* creation de la connection Socket*/
         socket = new DatagramSocket();
         socket.setBroadcast(true);
@@ -102,7 +104,7 @@ public class Broadcaster extends JList implements Runnable {
         timer = new Timer();
         timer.schedule(new envoyerPacketBroadcast(), 0, 1200);
         timerRefreshJlist = new Timer();
-        timer.schedule(new RefreshJlist(), 0, 18 * 1000);
+       
         /*boucle infinie pour recevoir des broadcasts*/
         while (running) {
             try {
@@ -114,40 +116,16 @@ public class Broadcaster extends JList implements Runnable {
                         break;
                     }
                 }
-                if (messageRecu.equals(Serveur.PW_ACCEPTED)) {
+                if (messageRecu.equals(PW_ACCEPTED)) {
                     connectionAccepte = true;
                     TimeUnit.MILLISECONDS.sleep(300);
                 } else {
                     infos = new InfoServeur(messageRecu);
-                    /*boolean qui verifie si la liste contient deja  les infos du serveur envoye*/
-                    boolean contient = false;
-                    /*series d'if qui permet d'updater la liste avec les infos recues*/
-                    if (liste.size() != 0) {
-                        for (int i = 0; i < liste.size(); i++) {
-                            /* a priori 'contains' de modellist n'utilise pas 'equals' de Infoserveur, d'ou la boucle*/
-                            if (liste.get(i).equals(infos)) {
-                                /*update de nombre de clients*/
-                                if (infos.getClients() != liste.get(i).getClients()) {
-                                    liste.set(i, infos);
-                                    SwingUtilities.invokeLater(new UpdateList());
-                                }
-                                contient = true;
-                                break;
-                            } else {
-                                contient = false;
-                            }
-                        }
-                    } else {
-                        contient = false;
-                    }
-                    if (contient == false) {
-                        /* si la donnee recue n'est pas deja dans la liste*/
-                        liste.add(infos);
-                        SwingUtilities.invokeLater(new UpdateList());
-                    }
+                    listeServeur.addServeur(infos);
                     connectionAccepte = false;
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("ERROR WHILE BROADCASTING");
             }
         }
@@ -161,28 +139,11 @@ public class Broadcaster extends JList implements Runnable {
         byte[] data2 = (mdp + "~~").getBytes();
         packetMDP =
             new DatagramPacket(data2, data2.length,
-                               InetAddress.getByName(liste.get(ongletroom.getListeIndexSelecte()).getAdresse()),
+                               InetAddress.getByName(listeServeur.getAdresseByIndex(ongletroom.getListeIndexSelecte())),
                                Serveur.PORT_DE_BROADCAST);
         socket.send(packetMDP);
     }
 
-    /**
-     * class UpdateList qui est un Thread qui met a jour la jlist et il est invoque
-     * par la methode invokeLater();
-     */
-    private class UpdateList implements Runnable {
-        public void run() {
-            model = new DefaultListModel();
-            broadcast.setModel(model);
-            model.clear(); // efface la liste model
-            int i;
-            if (liste.size() != 0) {
-                for (i = 0; i <= liste.size() - 1; i++) {
-                    model.addElement(liste.get(i)); // ajoute chaque element de la liste arrayList a la liste model
-                }
-            }
-        }
-    }
 
     /**
      * Classe envoyer qui herite de TimerTask qui envoie les broadcasts
@@ -199,16 +160,7 @@ public class Broadcaster extends JList implements Runnable {
         }
     }
 
-    /**
-     * Classe refreshJlist qui herite de TimerTask qui nettoie la <InfoServeur>liste
-     * pour mettre a jour la disparition des serveurs;
-     */
-    private class RefreshJlist extends TimerTask {
-        public void run() {
-            liste.clear();
-            SwingUtilities.invokeLater(new UpdateList());
-        }
-    }
+
     
     /**
      * accesseur util dans la classe fenetreRooms pour verifier si la connection a ete accepte
