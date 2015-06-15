@@ -71,12 +71,8 @@ public class OngletRooms extends JPanel {
      */
     public OngletRooms(Fenetre fenetre) {
         this.fenetre = fenetre;
-        try {
-            listeServeurs = new ListeServeur(this);
-            broadcast = new Broadcaster(this,listeServeurs);
-        } catch (IOException e) {
-            afficherMessageErreur("Impossible de communiquer avec le reseau, verifiez votre connexion", "Erreur");
-        }
+        listeServeurs = new ListeServeur(this);
+        broadcast = new Broadcaster(this,listeServeurs);
         Thread t = new Thread(broadcast);
         t.start();
         // Ajout des composants SWING ici
@@ -166,9 +162,6 @@ public class OngletRooms extends JPanel {
                             }
                         } catch (InterruptedException e) {
                             afficherMessageErreur("Une exception est produit lors de la connexion", "Erreur");
-                        } catch (IOException e) {
-                            afficherMessageErreur("Impossible d'envoyer le mot de passe au serveur pour verification",
-                                                  "Erreur");
                         }
                     } else {
                         arret = true;

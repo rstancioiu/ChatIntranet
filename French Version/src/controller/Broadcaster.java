@@ -22,6 +22,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
+import model.Aes;
+
 import view.ListeServeur;
 
 /**
@@ -49,47 +51,60 @@ public class Broadcaster implements Runnable {
     private DatagramPacket packetBroadcast; //packet broadcaste
     private DatagramPacket packetReponse; //packet recu
     private DatagramSocket socket; // socket de type UDP
+    private Aes aes = new Aes();
     private static final String PW_ACCEPTED = "wowsuchpassword~~";
     private static final String DISCOVERY = "youwutm8~~";
-    private byte[] data = DISCOVERY.getBytes(); //message envoye en tableau de bytes
-    
+    private byte[] data; //message envoye en tableau de bytes
+
     /*timers utilise pour updater la jliste*/
     private Timer timer;
     private Timer timerRefreshJlist;
-    
+
     /*String de message recu du serveur*/
     private String messageRecu;
-    
+
     private boolean connectionAccepte; //envoie vrai si la connection vers le serveur a ete admise
-    private byte[] recu = new byte[512]; // tableau de byte qui contient le message recu
-    
+    private byte[] recu = new byte[4096]; // tableau de byte qui contient le message recu
+
     private DatagramPacket packetMDP; // datagramPacket utilise pour envoyer le mot de passe
     /*confirmation du serveur vers le client qu'il a bien envoye le mot de passe correct*/
     private String accepteMdp;
     /*arrayList d'InfoServeur qui est ajoute a la jliste*/
-    
+
     private Boolean running = true;
     private OngletRooms ongletroom;
     private InfoServeur infos;
     private ListeServeur listeServeur;
-    
+
 
     /**
      * Constructeur de la classe Broadcaster ou sont definis la connection Socket
      * et les broadcasts envoyes et recus.
      * @param or
      */
-    public Broadcaster(OngletRooms or,ListeServeur listeServeur) throws IOException {
+    public Broadcaster(OngletRooms or, ListeServeur listeServeur) {
         this.ongletroom = or;
-        connectionAccepte = false;
-        this.listeServeur=listeServeur;
-        /* creation de la connection Socket*/
-        socket = new DatagramSocket();
-        socket.setBroadcast(true);
-        packetBroadcast =
-            new DatagramPacket(data, data.length, InetAddress.getByName("255.255.255.255"), Serveur.PORT_DE_BROADCAST);
-        /* paquet ou l'on "stocke" la reponse recue*/
-        packetReponse = new DatagramPacket(recu, recu.length);
+        try {
+            data = (aes.encrypt(DISCOVERY,0)).getBytes();
+            byte[] donneesEnvoye = new byte[4096];
+            for(int i=0;i<4096;++i){
+                if(i<data.length)
+                    donneesEnvoye[i]=data[i];
+                else donneesEnvoye[i]=0;
+            }
+            connectionAccepte = false;
+            this.listeServeur = listeServeur;
+            /* creation de la connection Socket*/
+            socket = new DatagramSocket();
+            socket.setBroadcast(true);
+            packetBroadcast =
+                new DatagramPacket(donneesEnvoye, donneesEnvoye.length, InetAddress.getByName("255.255.255.255"),
+                                   Serveur.PORT_DE_BROADCAST);
+            /* paquet ou l'on "stocke" la reponse recue*/
+            packetReponse = new DatagramPacket(recu, recu.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -103,12 +118,20 @@ public class Broadcaster implements Runnable {
         timer = new Timer();
         timer.schedule(new envoyerPacketBroadcast(), 0, 1200);
         timerRefreshJlist = new Timer();
-       
+
         /*boucle infinie pour recevoir des broadcasts*/
         while (running) {
             try {
                 socket.receive(packetReponse);
                 messageRecu = new String(packetReponse.getData());
+                String messageTronque="";
+                for(int i=0;i<messageRecu.length();++i) {
+                    if(messageRecu.charAt(i)==0) {
+                        break;
+                    }
+                    else messageTronque+=messageRecu.charAt(i);;
+                }
+                messageRecu= aes.decrypt(messageTronque,0);
                 for (int i = 1; i < messageRecu.length(); i++) {
                     if (messageRecu.charAt(i) == '~' && messageRecu.charAt(i - 1) == '~') {
                         messageRecu = messageRecu.substring(0, i + 1);
@@ -134,13 +157,24 @@ public class Broadcaster implements Runnable {
      * Methode qui envoie le string mdp (mot de passe) vers le serveur pour verification
      * @param mdp
      */
-    public void envoyerMdp(String mdp) throws IOException {
-        byte[] data2 = (mdp + "~~").getBytes();
-        packetMDP =
-            new DatagramPacket(data2, data2.length,
-                               InetAddress.getByName(listeServeur.getAdresseByIndex(ongletroom.getListeIndexSelecte())),
-                               Serveur.PORT_DE_BROADCAST);
-        socket.send(packetMDP);
+    public void envoyerMdp(String mdp) {
+        try {
+            String messageEnvoye = mdp + "~~";
+            byte[] data2 = (aes.encrypt(messageEnvoye,0)).getBytes();
+            byte[] donneesEnvoye = new byte[4096];
+            for(int i=0;i<4096;++i){
+                if(i<data2.length)
+                    donneesEnvoye[i]=data2[i];
+                else donneesEnvoye[i]=0;
+            }
+            packetMDP =
+                new DatagramPacket(donneesEnvoye, donneesEnvoye.length,
+                                   InetAddress.getByName(listeServeur.getAdresseByIndex(ongletroom.getListeIndexSelecte())),
+                                   Serveur.PORT_DE_BROADCAST);
+            socket.send(packetMDP);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -160,14 +194,13 @@ public class Broadcaster implements Runnable {
     }
 
 
-    
     /**
      * accesseur util dans la classe fenetreRooms pour verifier si la connection a ete accepte
      */
     public boolean isConnectionAccepte() {
         return connectionAccepte;
     }
-    
+
     /**
      * accesseur qui permet de changer le boolean connectionAccepte a l'interieur
      * de la FenetreRoom
