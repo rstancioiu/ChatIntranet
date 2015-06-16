@@ -138,7 +138,7 @@ public class Serveur implements Runnable {
                     clients[i].envoyer(message);
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("e3");
         }
     }
@@ -155,7 +155,7 @@ public class Serveur implements Runnable {
                     break;
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("e4");
         }
     }
@@ -172,10 +172,8 @@ public class Serveur implements Runnable {
                     client.envoyer(new Message(Message.NOUVEAU_UTILISATEUR, null, clients[i].getNom(), null));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("e5.1");
-        } catch (InterruptedException e) {
-            System.out.println("e5.2");
         }
     }
 

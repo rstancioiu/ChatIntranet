@@ -11,15 +11,17 @@ import java.net.Socket;
 
 import java.util.concurrent.TimeUnit;
 
+import model.Aes;
+
 /**
  * La classe Client est un objet attribue a chaque utilisateur connecte au serveur.
  * C'est l'outil utilise qui repond au demande d'utilisateurs.
- * Elle est implemente de Runnable (c'est un Thread) et est utilisee par 
+ * Elle est implemente de Runnable (c'est un Thread) et est utilisee par
  * la classe Serveur pour envoyer les differents types de messages vers les utilisateurs.
  * Cette classe concerne seulement le serveur et non le client(utilisateur).
  * @see controller.Serveur
  * @see model.Message
- * @see Socket 
+ * @see Socket
  */  
 public class Client implements Runnable {
     
@@ -27,6 +29,7 @@ public class Client implements Runnable {
     private Socket socket;
     private PrintWriter fluxSortant; //transforme le flux sortant dans un text-output
     private BufferedReader fluxEntrant; //lire le flux entrant
+    private Aes aes = new Aes();
     
     private String nom;
     private boolean running = true;
@@ -52,6 +55,7 @@ public class Client implements Runnable {
                 fluxEntrant = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String s = fluxEntrant.readLine();
                 if (s != null) {
+                    s = aes.decrypt(s, 1);
                     Message message = new Message(s);
                     /* le message envoye par un utilisateur et recu par le
                      * serveur est renvoye vers tous les utilisateurs*/
@@ -93,6 +97,7 @@ public class Client implements Runnable {
             }
             socket.close();
         } catch (Exception e) {
+            e.printStackTrace();
             running = false;
         }
     }
@@ -104,10 +109,15 @@ public class Client implements Runnable {
      * @param message
      * @throws IOException
      */
-    public void envoyer(Message message) throws IOException {
-        fluxSortant = new PrintWriter(socket.getOutputStream());
-        fluxSortant.println(message);
-        fluxSortant.flush();
+    public void envoyer(Message message) {
+        try {
+            fluxSortant = new PrintWriter(socket.getOutputStream());
+            String s=aes.encrypt(message.toString(), 1);
+            fluxSortant.println(s);
+            fluxSortant.flush();
+            } catch (Exception e) {
+            System.out.println("Une erreur a ete produite");
+        }
     }
 
     /**

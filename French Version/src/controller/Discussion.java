@@ -28,10 +28,14 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
+import javax.xml.crypto.Data;
+
+import model.Aes;
+
 /**
  * Classe Discussion. Elle herite de JTextPane et implemente Runnable(Thread).
- * L'envoi des messages se realise sur des Sockets de type TCP. 
- * Elle met a jour les messages recus par l'utilisateur . Ainsi, chaque type de 
+ * L'envoi des messages se realise sur des Sockets de type TCP.
+ * Elle met a jour les messages recus par l'utilisateur . Ainsi, chaque type de
  * message recu est traite dans cette classe.
  * @see Message
  * @see OngletDiscussion
@@ -45,6 +49,7 @@ public class Discussion extends JTextPane implements Runnable {
     private PrintWriter fluxSortant;
     private BufferedReader fluxEntrant;
     private Message message;
+    private Aes aes = new Aes();
     
     // Attributs lies au formatage du texte
     private StyledDocument doc;
@@ -109,6 +114,7 @@ public class Discussion extends JTextPane implements Runnable {
                 fluxEntrant = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String s = fluxEntrant.readLine();
                 if (s != null) {
+                    s= aes.decrypt(s, 1);
                     message = new Message(s);
                     if (message.getType() == Message.MESSAGE) {
                         if (message.getExpediteur().equals(ongletDiscussion.getPseudoLabel().getText())) {
@@ -148,7 +154,7 @@ public class Discussion extends JTextPane implements Runnable {
                         ongletDiscussion.updateCP(message);
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 insererLigne("Une erreur est survenue lors de la reception des messages - Deconnecte", erreur, true);
                 quitter=true;
             }
@@ -169,9 +175,10 @@ public class Discussion extends JTextPane implements Runnable {
     public void envoyer(Message message) {
         try {
             fluxSortant = new PrintWriter(socket.getOutputStream());
-            fluxSortant.println(message);
+            String s = aes.encrypt(message.toString(), 1);
+            fluxSortant.println(s);
             fluxSortant.flush();
-        } catch (IOException e) {
+        } catch (Exception e) {
             insererLigne("Erreur lors de l'envoi du message", erreur, false);
         }
     }
