@@ -62,6 +62,18 @@ public class InformationsServer {
         this.host = host;
     } 
 
+    public boolean equals(InformationsServer infs) {
+        if (name.equals(infs.getName()) && address.equals(infs.getAdrdess()) && port == infs.getPort() &&
+            host.equals(infs.getHost()))
+            return true;
+        else
+            return false;
+    }
+
+    public String sendData() {
+        return name + '~' + address + '~' + port + '~' + clients + '~' + clientsMax + '~' + host + '~' + type + "~~";
+    }
+
     public String getType() {
         return type;
     }
@@ -92,17 +104,5 @@ public class InformationsServer {
 
     public void setClients(int clients) {
         this.clients = clients;
-    }
-
-    public boolean equals(InformationsServer infs) {
-        if (name.equals(infs.getName()) && address.equals(infs.getAdrdess()) && port == infs.getPort() &&
-            host.equals(infs.getHost()))
-            return true;
-        else
-            return false;
-    }
-
-    public String sendData() {
-        return name + '~' + address + '~' + port + '~' + clients + '~' + clientsMax + '~' + host + '~' + type + "~~";
     }
 }

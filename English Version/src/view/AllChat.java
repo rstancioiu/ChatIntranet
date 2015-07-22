@@ -283,6 +283,15 @@ public class AllChat extends JPanel {
 
     }
 
+    public String getNameDiscussion() {
+        String nameDiscussion = infos.getName() + " - "+ language.getValue("CONNECTED_AS") + " " + alias;
+        int numberCharMax = 18;
+        if (nameDiscussion.length() > numberCharMax)
+            return nameDiscussion.substring(0, numberCharMax - 3) + "...";
+        else
+            return nameDiscussion;
+    }
+
     public JList getListeUtilisateurs() {
         return listUsers;
     }
@@ -293,15 +302,6 @@ public class AllChat extends JPanel {
 
     public Server getServer() {
         return server;
-    }
-
-    public String getNameDiscussion() {
-        String nameDiscussion = infos.getName() + " - "+ language.getValue("CONNECTED_AS") + " " + alias;
-        int numberCharMax = 18;
-        if (nameDiscussion.length() > numberCharMax)
-            return nameDiscussion.substring(0, numberCharMax - 3) + "...";
-        else
-            return nameDiscussion;
     }
 
     public void setAliasLabel(String s) {

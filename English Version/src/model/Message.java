@@ -5,6 +5,15 @@ package model;
  * Classe Message represents the type of messages that are sent through the sockets
  */
 public class Message {
+
+    //types of messages///
+    public static final int NEW_USER = 0;
+    public static final int MESSAGE = 1;
+    public static final int PRIVATE_MESSAGE = 2;
+    public static final int EXIT = 3;
+    public static final int HOST_EXIT = 4;
+    public static final int SEND_FILE = 5;
+    public static final int FILE_CANCELLED = 6;
     
     private String body, sender, receiver, fileName, address;
     private int port;
@@ -123,6 +132,18 @@ public class Message {
         }
     }
 
+    public String toString() {
+        if ((type != PRIVATE_MESSAGE) && (type != SEND_FILE) && (type != FILE_CANCELLED))
+            return "#" + type + "#" + ((sender==null)?0:sender.length())+ "#" + 
+                   ((body==null)?0:body.length()) + "#" + sender + "#" + body;
+        else if (type == PRIVATE_MESSAGE||type == FILE_CANCELLED)
+            return "#" + type + "#" + ((receiver==null)?0:receiver.length()) + "#"+ sender.length() +"#" +((body==null)?0:body.length())+"#"
+                   + receiver + "#" + sender + "#" + body;
+        else
+            return "#" + type + "#" +receiver.length()+ "#" + sender.length() + "#" +((address==null)?0:address.length())  + "#" + 
+                   receiver + "#" + sender + "#" + address + '#' + port + '#' + fileSize + '#' + fileName;
+    }
+
     public String getBody() {
         return body;
     }
@@ -137,18 +158,6 @@ public class Message {
 
     public String getReceiver() {
         return receiver;
-    }
-
-    public String toString() {
-        if ((type != PRIVATE_MESSAGE) && (type != SEND_FILE) && (type != FILE_CANCELLED))
-            return "#" + type + "#" + ((sender==null)?0:sender.length())+ "#" + 
-                   ((body==null)?0:body.length()) + "#" + sender + "#" + body;
-        else if (type == PRIVATE_MESSAGE||type == FILE_CANCELLED)
-            return "#" + type + "#" + ((receiver==null)?0:receiver.length()) + "#"+ sender.length() +"#" +((body==null)?0:body.length())+"#"
-                   + receiver + "#" + sender + "#" + body;
-        else
-            return "#" + type + "#" +receiver.length()+ "#" + sender.length() + "#" +((address==null)?0:address.length())  + "#" + 
-                   receiver + "#" + sender + "#" + address + '#' + port + '#' + fileSize + '#' + fileName;
     }
 
     public String getFileName() {
@@ -166,13 +175,4 @@ public class Message {
     public int getFileSize() {
         return fileSize;
     }
-    
-    ///types of messages///
-    public static final int NEW_USER = 0;
-    public static final int MESSAGE = 1;
-    public static final int PRIVATE_MESSAGE = 2;
-    public static final int EXIT = 3;
-    public static final int HOST_EXIT = 4;
-    public static final int SEND_FILE = 5;
-    public static final int FILE_CANCELLED = 6;
 }

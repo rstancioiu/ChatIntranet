@@ -74,7 +74,7 @@ public class ReceiveFile implements Runnable {
             currentTotal = readBytes;
             TimeUnit.MILLISECONDS.sleep(100);
             
-            //partie lire
+            //read
             do {
                 readBytes = is.read(bytearray, currentTotal, (bytearray.length - currentTotal));
                 if (readBytes >= 0)
@@ -84,7 +84,7 @@ public class ReceiveFile implements Runnable {
             } while (readBytes > -1);
             download.setProgress(99);
             
-            //partie ecrire
+            //write
             bos.write(bytearray, 0, currentTotal);
             log.info("donwload of file "+ fileName + " finished");
             bos.flush();

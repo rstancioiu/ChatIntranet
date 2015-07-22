@@ -148,24 +148,11 @@ public class Broadcaster implements Runnable {
             log.error("ERROR WHEN SENDING A PASSWORD "+ e);
         }
     }
-
-
-    /**
-     * Class which send broadcasts each X seconds 
-     */
-    private class sendPacketBroadcast extends TimerTask {
-        public void run() {
-            try {
-                log.info("packet broadcast sent");
-                socket.send(packetBroadcast); // envoie de packet
-            } catch (IOException e) {
-                socket.close();
-                log.info("Broadcast interrupted - socket closed");
-            }
-        }
-    }
-
     
+    /**
+    * Truncates a message 
+    * @param message 
+    */
     public String truncateMessage(String message) {
         String messageTruncated="";
         for(int i=0;i<message.length();++i) {
@@ -183,6 +170,21 @@ public class Broadcaster implements Runnable {
 
     public void setAcceptedConnection(boolean acceptedConnection) {
         this.acceptedConnection = acceptedConnection;
+    }
+
+     /**
+     * Class which send broadcasts each X seconds 
+     */
+    private class sendPacketBroadcast extends TimerTask {
+        public void run() {
+            try {
+                log.info("packet broadcast sent");
+                socket.send(packetBroadcast); 
+            } catch (IOException e) {
+                socket.close();
+                log.info("Broadcast interrupted - socket closed");
+            }
+        }
     }
 }
 

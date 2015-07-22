@@ -71,11 +71,6 @@ public class ServerList extends JPanel {
         window.verifyConnection(info);
     }
 
-
-    public int getSelectedPosition() {
-        return position;
-    }
-
     private class UpdateList implements Runnable {
         public void run() {
             serverList.removeAll();
@@ -111,6 +106,10 @@ public class ServerList extends JPanel {
             list.clear();
             SwingUtilities.invokeLater(new UpdateList());
         }
+    }
+
+        public int getSelectedPosition() {
+        return position;
     }
     
     public String getAddressByIndex(int index) {

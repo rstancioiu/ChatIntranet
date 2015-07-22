@@ -21,6 +21,9 @@ import org.apache.logging.log4j.Logger;
  */
 public class Server implements Runnable {
     
+    public static final int BROADCAST_PORT = 13371;
+    public static final int SLEEP = 120;
+
     private static final Logger log = LogManager.getLogger();
     
     private boolean disconnect = false;
@@ -82,10 +85,6 @@ public class Server implements Runnable {
         } catch (IOException e) {
             log.error("Error when closing the server socket");
         }
-    }
-
-    public ServerSocket getSocketserveur() {
-        return socketserver;
     }
 
     public void addClient(Socket socket) throws IOException {
@@ -202,9 +201,9 @@ public class Server implements Runnable {
     public int getPort() {
         return port;
     }
-    
-    // Constantes
-    public static final int BROADCAST_PORT = 13371;
-    public static final int SLEEP = 120;
+
+    public ServerSocket getSocketserveur() {
+        return socketserver;
+    }
 }
 

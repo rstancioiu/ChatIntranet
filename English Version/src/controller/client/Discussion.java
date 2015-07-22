@@ -123,6 +123,10 @@ public class Discussion extends JTextPane implements Runnable {
         }
     }
 
+    /**
+    * Handles a message received
+    * @param m message sent
+    */
     public void handleMessage(Message m) {
         int typeOfMessage = m.getType();
         
@@ -166,7 +170,7 @@ public class Discussion extends JTextPane implements Runnable {
 
     /**
      * Method which sends a message to the server
-     * @param message
+     * @param message sent message
      */
     public void sendMessage(Message message) {
         try {
@@ -190,9 +194,15 @@ public class Discussion extends JTextPane implements Runnable {
         exit = true;
     }
 
-    public void insertLine(String texte, Style style, boolean heure) {
+    /**
+    * Insert a line into the discussion
+    * @param texte line 
+    * @param style
+    * @param hour true if the hour has to be added to the texte
+    */
+    public void insertLine(String texte, Style style, boolean hour) {
         try {
-            if (heure) {
+            if (hour) {
                 SimpleDateFormat h = new SimpleDateFormat("hh:mm");
                 String localHour = h.format(new Date());
                 doc.insertString(doc.getLength(), "\n[" + localHour + "]   ", infos);

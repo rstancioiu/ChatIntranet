@@ -50,6 +50,11 @@ public class Client implements Runnable {
             running = false;
         }
     }
+
+    /**
+    * Handles a message
+    * @param s message
+    */
     public void handleMessage(String s) {
         Message message = new Message(s);
         int typeOfMessage = message.getType();
@@ -94,6 +99,10 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+    * Sends a message
+    * @param message
+    */
     public void sendMessage(Message message) {
         try {
             String s=aes.encrypt(message.toString(), 1);
@@ -107,6 +116,10 @@ public class Client implements Runnable {
         }
     }
 
+    /**
+    * Compare function between clients
+    * @param client to be compared
+    */
     public boolean equals(Client client) {
         if (name.equals(client.getNom())) {
             return true;

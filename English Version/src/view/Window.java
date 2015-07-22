@@ -223,19 +223,6 @@ public class Window extends JFrame {
         }
     }
 
-
-    public void showErrorMessage(String txt, String titre) {
-        JOptionPane.showMessageDialog(null, txt, titre, JOptionPane.ERROR_MESSAGE);
-    }
-
-    public JButton getBoutonCreer() {
-        return buttonCreate;
-    }
-
-    public int getIndexSelected() {
-        return indexSelected;
-    }
-
     private void windowClosingEvent(WindowEvent e) {
         if (!noGroup) {
             ArrayList<AllChat> tabOnglets = groups.getTabDiscussions();
@@ -249,6 +236,18 @@ public class Window extends JFrame {
             }
         }
         System.exit(0);
+    }
+
+    public void showErrorMessage(String txt, String titre) {
+        JOptionPane.showMessageDialog(null, txt, titre, JOptionPane.ERROR_MESSAGE);
+    }
+
+    public JButton getBoutonCreer() {
+        return buttonCreate;
+    }
+
+    public int getIndexSelected() {
+        return indexSelected;
     }
 
     public void setNoGroup() {

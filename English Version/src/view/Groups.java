@@ -57,8 +57,6 @@ public class Groups extends JFrame {
             }
         });
     }
-    
-
 
     public void addTab(JPanel panel) {
         if (panel instanceof AllChat) {
@@ -71,14 +69,6 @@ public class Groups extends JFrame {
             tabs.setSelectedIndex(tabs.getTabCount() - 1);
             log.info("A private tab added");
         }
-    }
-
-    public JTabbedPane getTabs() {
-        return tabs;
-    }
-    
-    public Window getWindow() {
-        return window;
     }
 
     private void windowClosingEvent(WindowEvent e) {
@@ -107,12 +97,21 @@ public class Groups extends JFrame {
         }
     }
     
-    public ArrayList<AllChat> getTabDiscussions() {
-        return tabDiscussions;
-    }
     public void close() {
         window.getBoutonCreer().setEnabled(true);
         window.setNoGroup();
         frame.dispose();
+    }
+
+    public ArrayList<AllChat> getTabDiscussions() {
+        return tabDiscussions;
+    }
+
+    public JTabbedPane getTabs() {
+        return tabs;
+    }
+    
+    public Window getWindow() {
+        return window;
     }
 }

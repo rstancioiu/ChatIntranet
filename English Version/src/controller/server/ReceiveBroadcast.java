@@ -35,6 +35,7 @@ public class ReceiveBroadcast implements Runnable {
     public static final String PW_ACCEPTED = "wowsuchpassword~~";
     public static final String DISCOVERY = "youwutm8~~";
 
+
     public ReceiveBroadcast(InformationsServer infos, String password) throws IOException {
         this.infos = infos;
         this.password = password;
@@ -43,20 +44,15 @@ public class ReceiveBroadcast implements Runnable {
         packetReceived = new DatagramPacket(dataReceived, dataReceived.length);
     }
 
+
     public void run() {
         try {
             while (running) {
                 socketUdp.receive(packetReceived); 
                 clientAddress = packetReceived.getAddress(); 
                 messageReceived = new String(packetReceived.getData());
-                String messageTruncated="";
-                for(int i=0;i<messageReceived.length();++i) {
-                    if(messageReceived.charAt(i)==0) {
-                        break;
-                    }
-                    else messageTruncated+=messageReceived.charAt(i);;
-                }
-                messageReceived= aes.decrypt(messageTruncated,0);
+
+                messageReceived= aes.decrypt(truncateMessage(messageReceived),0);
                 for (int i = 1; i < messageReceived.length(); i++) {
                     if (messageReceived.charAt(i) == '~' && messageReceived.charAt(i - 1) == '~') {
                         messageReceived = messageReceived.substring(0, i + 1);
@@ -104,6 +100,22 @@ public class ReceiveBroadcast implements Runnable {
             running = false;
             socketUdp.close();
         }
+    }
+
+    /**
+    * Truncates a message 
+    * @param message 
+    */
+    public String truncateMessage(String message)
+    {
+        String messageTruncated="";
+        for(int i=0;i<messageReceived.length();++i) {
+            if(messageReceived.charAt(i)==0) {
+                break;
+            }
+            else messageTruncated+=messageReceived.charAt(i);;
+        }
+        return messageTruncated;
     }
 
     public void setRunning(boolean running) {
