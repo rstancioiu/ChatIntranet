@@ -70,7 +70,7 @@ public class AllChat extends JPanel {
         this.server = server;
         this.groups = groups;
         
-        log.info("Testing");
+        log.info(alias + "is entering in " + server.getName());
         
         discussion = new Discussion(infos, this,language);
         Thread threadprincipal = new Thread(discussion);
@@ -107,7 +107,7 @@ public class AllChat extends JPanel {
         //action of ENTER key
         Action action1 = new AbstractAction() {    
             public void actionPerformed(ActionEvent e) {
-                send();
+                sendMessage();
             }
         };
         String keyStrokeAndKey = "ENTER";
@@ -167,7 +167,7 @@ public class AllChat extends JPanel {
     }
 
     private void buttonSend_actionPerformed(ActionEvent e) {
-        send();
+        sendMessage();
     }
 
     private void buttonQuit_actionPerformed(ActionEvent e) {
@@ -177,22 +177,22 @@ public class AllChat extends JPanel {
                 JOptionPane.showConfirmDialog(null, language.getValue("SERVER_SHUT_DOWN"), language.getValue("QUIT"),
                                               JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (choix == JOptionPane.YES_OPTION) {
-                exit();
+                quit();
                 server.stopServer();
                 groups.getWindow().getBoutonCreer().setEnabled(true);
             } else if (choix == JOptionPane.NO_OPTION) {
-                exit();
+                quit();
 
             }
         } else {
-            exit();
+            quit();
         }
 
     }
 
-    public void exit() {
+    public void quit() {
         try {
-            discussion.exit();
+            discussion.quit();
         } catch (NullPointerException e) {
             groups.getTabs().remove(this);
             log.error("Error on quitting",e);
@@ -214,7 +214,7 @@ public class AllChat extends JPanel {
     }
 
 
-    private void send() {
+    private void sendMessage() {
         boolean spaces = true;
         if (textArea.getText().length() != 0) {
             int i = 0;
@@ -229,7 +229,7 @@ public class AllChat extends JPanel {
             spaces = true;
         if (spaces == false) {
             Message message = new Message(1, textArea.getText(), labelAlias.getText(), null);
-            discussion.send(message);
+            discussion.sendMessage(message);
             textArea.setText(null);
         }
     }
@@ -240,7 +240,7 @@ public class AllChat extends JPanel {
             privateDiscussions.add(name);
             listPrivateDiscussions.add(new PrivateChat(name, alias, this, groups, discussion,language));
             groups.addTab(listPrivateDiscussions.get(listPrivateDiscussions.size()-1));
-
+            log.info(name+" and "+alias+ " are in a private conversation");
         }
     }
 
@@ -272,7 +272,6 @@ public class AllChat extends JPanel {
                 break;
             }
         }
-
     }
     
     public void scrollDown() {

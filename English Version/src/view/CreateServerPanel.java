@@ -26,6 +26,7 @@ import model.Language;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
 public class CreateServerPanel extends JPanel {
     private static final Logger log = LogManager.getLogger();
     private JCheckBox checkbox = new JCheckBox();
@@ -37,7 +38,7 @@ public class CreateServerPanel extends JPanel {
 
     public CreateServerPanel(Language language) {
         this.language=language;  
-        log.info("Testing");
+        log.info("Creation of a server");
         
         JLabel[] labels = new JLabel[4];
         labels[0] = new JLabel("");

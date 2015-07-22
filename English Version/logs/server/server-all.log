@@ -1,0 +1,57 @@
+14:32:07.896 [AWT-EventQueue-0] INFO  controller.server.Server - public server sda sda is created
+14:32:07.927 [Thread-10] INFO  controller.server.Client - Handling message of type 0
+14:32:08.048 [Thread-10] INFO  controller.server.Client - message sent
+14:32:08.050 [Thread-10] INFO  controller.server.Client - message sent
+14:32:08.650 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:08.652 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:09.860 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:09.860 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:10.742 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:10.743 [Thread-10] INFO  controller.server.Client - message sent
+14:32:10.969 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:10.970 [Thread-10] INFO  controller.server.Client - message sent
+14:32:11.061 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:11.062 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:11.179 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:11.179 [Thread-10] INFO  controller.server.Client - message sent
+14:32:11.551 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:11.551 [Thread-10] INFO  controller.server.Client - message sent
+14:32:11.739 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:11.739 [Thread-10] INFO  controller.server.Client - message sent
+14:32:11.938 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:11.939 [Thread-10] INFO  controller.server.Client - message sent
+14:32:12.121 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:12.121 [Thread-10] INFO  controller.server.Client - message sent
+14:32:12.263 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:12.265 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:12.315 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:12.316 [Thread-10] INFO  controller.server.Client - message sent
+14:32:12.535 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:12.535 [Thread-10] INFO  controller.server.Client - message sent
+14:32:12.752 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:12.752 [Thread-10] INFO  controller.server.Client - message sent
+14:32:12.967 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:12.968 [Thread-10] INFO  controller.server.Client - message sent
+14:32:13.177 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:13.177 [Thread-10] INFO  controller.server.Client - message sent
+14:32:13.379 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:13.380 [Thread-10] INFO  controller.server.Client - message sent
+14:32:13.464 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:13.465 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:13.578 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:13.579 [Thread-10] INFO  controller.server.Client - message sent
+14:32:13.770 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:13.770 [Thread-10] INFO  controller.server.Client - message sent
+14:32:13.958 [Thread-10] INFO  controller.server.Client - Handling message of type 1
+14:32:13.958 [Thread-10] INFO  controller.server.Client - message sent
+14:32:14.664 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:14.664 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:15.866 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:15.868 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:17.073 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:17.073 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery
+14:32:17.635 [Thread-10] INFO  controller.server.Client - Handling message of type 3
+14:32:17.637 [Thread-10] INFO  controller.server.Client - message sent
+14:32:17.664 [Thread-9] ERROR controller.server.Server - Error on adding a client
+14:32:18.275 [Thread-8] INFO  controller.server.ReceiveBroadcast - message received: youwutm8~~
+14:32:18.276 [Thread-8] INFO  controller.server.ReceiveBroadcast - Reply to packet discovery

@@ -2,8 +2,8 @@ package view;
 
 
 import controller.client.Discussion;
-import controller.client.SendFile;
 import controller.client.ReceiveFile;
+import controller.client.SendFile;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,7 +21,6 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
-
 import java.util.Date;
 
 import javax.swing.AbstractAction;
@@ -47,9 +46,12 @@ import javax.swing.text.StyledDocument;
 import model.Language;
 import model.Message;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PrivateChat extends JPanel {
     
-
+    private static final Logger log = LogManager.getLogger();
     private BorderLayout layout = new BorderLayout();
     private JPanel panelTop = new JPanel();
     private JPanel panelBottom = new JPanel();
@@ -87,6 +89,9 @@ public class PrivateChat extends JPanel {
         this.discussion = discus;
         this.allChat = allChat;
         this.sender = receiv;
+        
+        log.info("A private chat created between "+ alias + " " + sender);
+        
         buttonSendFile =new JButton(language.getValue("SEND_FILE"));
         document = (StyledDocument) textPane.getDocument();
         myAlias = textPane.addStyle("expediteur", null);
@@ -145,7 +150,7 @@ public class PrivateChat extends JPanel {
                         Message messageEnv =
                             new Message(Message.SEND_FILE, fileName, (int) fichier.length(), port, adresse,
                                         alias, sender);
-                        discussion.send(messageEnv);
+                        discussion.sendMessage(messageEnv);
                     } else {
                         insertLine(language.getValue("FILE_SIZE_EXCEEDED"), send,true);
                     }
@@ -211,7 +216,7 @@ public class PrivateChat extends JPanel {
                 Message message = new Message(Message.PRIVATE_MESSAGE, textArea.getText(), alias, sender);
                 insertLine(message.getSender(),styleAlias,true);
                 insertLine(" : "+message.getBody(),body,false);
-                discussion.send(message);
+                discussion.sendMessage(message);
                 textArea.setText(null);
                 scrollerDown();
         }
@@ -257,7 +262,7 @@ public class PrivateChat extends JPanel {
                     } else if (choix == JFileChooser.CANCEL_OPTION) {
                         Message messageAnnuler =
                             new Message(Message.FILE_CANCELLED, message.getFileName(), alias, sender);
-                        discussion.send(messageAnnuler);
+                        discussion.sendMessage(messageAnnuler);
                         insertLine("Download cancelled",
                                      send,true);
                         scrollerDown();
@@ -271,7 +276,7 @@ public class PrivateChat extends JPanel {
                 scrollerDown();
                 Message messageAnnuler =
                     new Message(Message.FILE_CANCELLED, message.getFileName(), alias, sender);
-                discussion.send(messageAnnuler);
+                discussion.sendMessage(messageAnnuler);
             }
         } else if (message.getType() == message.FILE_CANCELLED) {
 

@@ -1,0 +1,66 @@
+14:32:01.269 [main] INFO  controller.client.Broadcaster - Broadcaster created
+14:32:01.443 [main] INFO  controller.client.Broadcaster - Packet Broadcast Discovery
+14:32:01.444 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:02.647 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:03.847 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:05.047 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:06.247 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:07.447 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:07.920 [AWT-EventQueue-0] INFO  controller.client.Discussion - Creation of a discussion
+14:32:07.925 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:08.049 [Thread-11] INFO  controller.client.Discussion - Message received of type : 0
+14:32:08.052 [Thread-11] INFO  controller.client.Discussion - Message received of type : 0
+14:32:08.647 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:08.655 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:09.860 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:09.860 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:10.741 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:10.744 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:10.968 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:10.970 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:11.061 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:11.062 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:11.178 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:11.180 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:11.550 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:11.552 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:11.738 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:11.740 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:11.937 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:11.939 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:12.120 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:12.122 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:12.261 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:12.266 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:12.314 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:12.316 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:12.535 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:12.535 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:12.752 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:12.752 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:12.966 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:12.968 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:13.176 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:13.177 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:13.378 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:13.380 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:13.462 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:13.467 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:13.577 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:13.579 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:13.769 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:13.771 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:13.957 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:13.959 [Thread-11] INFO  controller.client.Discussion - Message received of type : 1
+14:32:14.664 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:14.664 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:15.864 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:15.870 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:17.073 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:17.073 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:17.632 [AWT-EventQueue-0] INFO  controller.client.Discussion - quit discussion
+14:32:17.632 [AWT-EventQueue-0] INFO  controller.client.Discussion - Sending a message
+14:32:17.638 [Thread-11] INFO  controller.client.Discussion - Message received of type : 3
+14:32:18.273 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent
+14:32:18.278 [Thread-4] INFO  controller.client.Broadcaster - Informations from sda sda
+14:32:19.473 [Timer-1] INFO  controller.client.Broadcaster - packet broadcast sent

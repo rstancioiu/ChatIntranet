@@ -1,23 +1,24 @@
 package controller.server;
 
 
-import model.Message;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import java.net.Socket;
 
-import java.util.concurrent.TimeUnit;
-
 import model.Aes;
+import model.Message;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Class Client is an object assigned to every user which is connected to the server.
  */  
 public class Client implements Runnable {
     
+    private static final Logger log = LogManager.getLogger();
     private Server server;
     private Socket socket;
     private PrintWriter flowExit;
@@ -40,18 +41,20 @@ public class Client implements Runnable {
                 String s = flowIncomming.readLine();
                 if (s != null) {
                     s = aes.decrypt(s, 1);
-                    answerMessage(s);
+                    handleMessage(s);
                 }
             }
             socket.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("ERROR OF SERVER",e);
             running = false;
         }
     }
-    public void answerMessage(String s) {
+    public void handleMessage(String s) {
         Message message = new Message(s);
         int typeOfMessage = message.getType();
+        
+        log.info("Handling message of type "+ typeOfMessage);
         
         switch(typeOfMessage) {
             case Message.MESSAGE:
@@ -98,6 +101,7 @@ public class Client implements Runnable {
             flowExit = new PrintWriter(socket.getOutputStream());
             flowExit.println(s);
             flowExit.flush();
+            log.info("message sent");
             } catch (Exception e) {
             System.out.println("An error occured");
         }

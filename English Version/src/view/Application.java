@@ -6,10 +6,13 @@ import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import model.Language;
 
 public class Application {
-
+    private static final Logger log = LogManager.getLogger();
 
     public Application() {
         Object[] selectionValues = { "English", "French" };
@@ -17,10 +20,13 @@ public class Application {
         Object selection =
             JOptionPane.showInputDialog(null, "Select language : ", "Language", JOptionPane.PLAIN_MESSAGE, null,
                                         selectionValues, initialSelection);
-        Language languageChosen = new Language("default");
+        String select = "default";
         if (selection != null) {
-            languageChosen = new Language(selection.toString());
+            select = selection.toString();
         }
+        Language languageChosen = new Language(select);
+        log.info("Language chosen :" + select);
+        
         Window window = new Window(languageChosen);
         window.setTitle("ChatIntranet");
         window.setVisible(true);

@@ -18,8 +18,12 @@ import javax.swing.JTextField;
 
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class LoginPanel extends JPanel {
     
+    private static final Logger log = LogManager.getLogger();
     private JPanel jPanel2 = new JPanel();
     private JPanel jPanel3 = new JPanel();
     private JLabel jLabel1 = new JLabel();
@@ -34,6 +38,8 @@ public class LoginPanel extends JPanel {
     public LoginPanel(String alias,Language language) {
         this.language=language;
         JLabel picLabel = new JLabel("");
+        
+        log.info(alias + " is trying to log in");
         
         try {
         

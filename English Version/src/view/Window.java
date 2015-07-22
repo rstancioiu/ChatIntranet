@@ -4,14 +4,11 @@ import controller.client.Broadcaster;
 
 import controller.server.Server;
 
-import model.InformationsServer;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -28,9 +25,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import model.InformationsServer;
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Window extends JFrame {
+    private static final Logger log = LogManager.getLogger();
     private JButton buttonCreate = new JButton();
     private JPanel panelTop = new JPanel();
     private BorderLayout layout = new BorderLayout();
@@ -55,6 +57,7 @@ public class Window extends JFrame {
         serverList = new ServerList(this,language);
         broadcast = new Broadcaster(this, serverList);
         Thread t = new Thread(broadcast);
+        log.info("Window created");
         t.start();
         this.setLayout(layout);
         this.add(panelTop, BorderLayout.NORTH);
@@ -77,16 +80,19 @@ public class Window extends JFrame {
         });
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                this_windowClosing(e);
+                windowClosingEvent(e);
             }
         });
     }
 
     public void verifyConnection(InformationsServer infos) {
+        log.info("Verification of the connection to: "+infos.getName());
         if (infos.getClients() == infos.getClientsMax()) {
+            log.info("Group " +  infos.getName() + " is full");
             JOptionPane.showMessageDialog(null, language.getValue("GROUP_FULL"), language.getValue("NO_PLACE"), JOptionPane.ERROR_MESSAGE);
         } else if (infos.getType().equals("public")) {
             if (fieldAlias.getText().length() != 0) {
+                log.info("Connection to public group:  "+infos.getName());
                 Connection(fieldAlias.getText(), infos);
             } else {
                 String pseudo = "";
@@ -105,6 +111,7 @@ public class Window extends JFrame {
                 }
                 if (!pseudo.equals("")) {
                     fieldAlias.setText(pseudo);
+                    log.info("Connection to public group:  "+infos.getName());
                     Connection(pseudo, infos);
                 }
             }
@@ -126,6 +133,7 @@ public class Window extends JFrame {
                                 broadcast.sendPassword(panel.getPassword());
                                 TimeUnit.MILLISECONDS.sleep(100);
                                 if (broadcast.isAccepted() == true) {
+                                    log.info("Connection to private group:  "+infos.getName());
                                     Connection(pseudo, infos);
                                     fieldAlias.setText(pseudo);
                                     arret = true;
@@ -134,6 +142,7 @@ public class Window extends JFrame {
                                 fieldAlias.setText(pseudo);
                             }
                         } catch (InterruptedException e) {
+                            log.error("Error on connecting to a private group");
                             showErrorMessage(language.getValue("ERROR_OCCURED"), language.getValue("Error"));
                         }
                     } else {
@@ -194,10 +203,12 @@ public class Window extends JFrame {
                         buttonCreate.setEnabled(false);
                         InformationsServer info = server.getInfos();
                         connecte = true;
+                        log.info("Connection to group:  "+info.getName());
                         Connection(name, info);
 
                     } catch (IOException i) {
                         buttonCreate.setEnabled(false);
+                        log.error("Error creating a server");
                         showErrorMessage(language.getValue("ERROR_GROUP"), language.getValue("ERROR"));
                     }
                 }
@@ -206,6 +217,7 @@ public class Window extends JFrame {
                     name = name.substring(0, 30);
                 }
             } catch (NullPointerException npe) {
+                log.error("Error creating a server");
                 showErrorMessage(language.getValue("ERROR_OCCURED"), language.getValue("ERROR"));
             }
         }
@@ -224,11 +236,11 @@ public class Window extends JFrame {
         return indexSelected;
     }
 
-    private void this_windowClosing(WindowEvent e) {
+    private void windowClosingEvent(WindowEvent e) {
         if (!noGroup) {
             ArrayList<AllChat> tabOnglets = groups.getTabDiscussions();
             for (int i = 0; i < tabOnglets.size(); i++) {
-                tabOnglets.get(i).exit();
+                tabOnglets.get(i).quit();
                 if (tabOnglets.get(i) != null) {
                     if (tabOnglets.get(i).getServer() != null) {
                         tabOnglets.get(i).getServer().stopServer();

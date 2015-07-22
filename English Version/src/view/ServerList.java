@@ -3,30 +3,25 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-
 import java.awt.GridLayout;
-
-import java.awt.List;
-
-import java.awt.event.MouseListener;
 
 import java.util.ArrayList;
 import java.util.Timer;
-
 import java.util.TimerTask;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JList;
-
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import model.InformationsServer;
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ServerList extends JPanel {
+    private static final Logger log = LogManager.getLogger();
     private  Timer refreshList;
     private ArrayList<InformationsServer> list= new ArrayList<InformationsServer>();
     private DefaultListModel model;
@@ -45,6 +40,7 @@ public class ServerList extends JPanel {
         serverList=this;
         refreshList = new Timer();
         refreshList.schedule(new RefreshJlist(), 0, 18 * 1000);
+        log.info("Creation of a list of servers");
     }
     
     public void addServer(InformationsServer infos) {
@@ -64,6 +60,7 @@ public class ServerList extends JPanel {
             list.add(infos);
             SwingUtilities.invokeLater(new UpdateList());
         }
+        log.info("Add of server: " + infos.getName());
     }
 
    public void verify(InformationsServer info) {
@@ -96,6 +93,7 @@ public class ServerList extends JPanel {
             panelaux.add(label3,BorderLayout.CENTER);
             panelaux.add(label4,BorderLayout.CENTER);
             panelaux.add(new JLabel(""));
+            log.info("Update list");
             serverList.add(panelaux);
             if (list.size() != 0) {
                 for (int i = 0; i <= list.size() - 1; i++) {
@@ -115,7 +113,7 @@ public class ServerList extends JPanel {
         }
     }
     
-    public String getAdresseByIndex(int index) {
+    public String getAddressByIndex(int index) {
         return list.get(index).getAdrdess();
     }
 }

@@ -1,0 +1,48 @@
+13:09:21.424 [AWT-EventQueue-0] INFO  view.CreateServerPanel - Testing
+13:09:27.325 [AWT-EventQueue-0] INFO  view.AllChat - Testing
+13:45:39.707 [main] INFO  view.Application - Language chosen :English
+13:45:39.724 [main] INFO  view.ServerList - Creation of a list of servers
+13:45:39.728 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+13:45:39.883 [main] INFO  view.Window - Window created
+13:45:41.789 [AWT-EventQueue-0] INFO  view.CreateServerPanel - Creation of a server
+13:45:45.115 [AWT-EventQueue-0] INFO  view.Window - Connection to group:  sdasda
+13:45:45.126 [AWT-EventQueue-0] INFO  view.AllChat - sdadsais entering in sdasda
+13:45:45.164 [AWT-EventQueue-0] INFO  view.Groups - A public tab added
+13:45:45.893 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:45.895 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+13:45:47.090 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:48.299 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:49.502 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:50.705 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:51.908 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:53.109 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:54.309 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:55.507 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:56.707 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:57.726 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+13:45:57.909 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:45:57.911 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+13:45:59.110 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:46:00.320 [Thread-4] INFO  view.ServerList - Add of server: sdasda
+13:46:00.524 [AWT-EventQueue-0] INFO  view.Groups - Window of groups is closing
+14:32:01.246 [main] INFO  view.Application - Language chosen :English
+14:32:01.266 [main] INFO  view.ServerList - Creation of a list of servers
+14:32:01.269 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+14:32:01.443 [main] INFO  view.Window - Window created
+14:32:06.034 [AWT-EventQueue-0] INFO  view.CreateServerPanel - Creation of a server
+14:32:07.901 [AWT-EventQueue-0] INFO  view.Window - Connection to group:  sda sda
+14:32:07.912 [AWT-EventQueue-0] INFO  view.AllChat - sdas dad sasd as dasdis entering in sda sda
+14:32:07.949 [AWT-EventQueue-0] INFO  view.Groups - A public tab added
+14:32:08.656 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:08.658 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+14:32:09.860 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:11.063 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:12.267 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:13.468 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:14.664 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:15.871 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:17.073 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:17.663 [AWT-EventQueue-0] INFO  view.Groups - Window of groups is closing
+14:32:18.279 [Thread-4] INFO  view.ServerList - Add of server: sda sda
+14:32:18.281 [AWT-EventQueue-0] INFO  view.ServerList - Update list
+14:32:19.269 [AWT-EventQueue-0] INFO  view.ServerList - Update list

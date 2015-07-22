@@ -10,10 +10,15 @@ import java.net.InetAddress;
 import model.Aes;
 import model.InformationsServer;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Class ReceiveBroadcast replies to the broadcasts sent by the different users.
  */
 public class ReceiveBroadcast implements Runnable {
+    
+    private static final Logger log = LogManager.getLogger();
     
     private DatagramSocket socketUdp;
     private DatagramPacket packetReplyPassword;
@@ -58,6 +63,9 @@ public class ReceiveBroadcast implements Runnable {
                         break;
                     }
                 }
+                
+                log.info("message received: " +messageReceived);
+                
                 if (messageReceived.equals(password + "~~") &&
                     infos.getType() == "prive") {
                     String messageSent=aes.encrypt(PW_ACCEPTED,0);
@@ -72,6 +80,7 @@ public class ReceiveBroadcast implements Runnable {
                         new DatagramPacket(dataSent, dataSent.length,
                                            clientAddress, packetReceived.getPort());
                     socketUdp.send(packetReplyPassword);
+                    log.info("Reply to packet password");
                 } else if (messageReceived.equals(DISCOVERY)) {
                     String messageSent=aes.encrypt((infos.sendData()),0);
                     byte[] dataSent = new byte[SIZE_MESSAGE];
@@ -85,13 +94,13 @@ public class ReceiveBroadcast implements Runnable {
                         new DatagramPacket(dataSent,
                                            dataSent.length, clientAddress,
                                            packetReceived.getPort());
+                    log.info("Reply to packet discovery");
                     socketUdp.send(packetReplyInfos); 
                 }
             }
             socketUdp.close();
         } catch (Exception e) {
-            System.out.println("ServerBroadcast timed out");
-            e.printStackTrace();
+            log.error("SERVER BROADCAST TIMED OUT",e);
             running = false;
             socketUdp.close();
         }

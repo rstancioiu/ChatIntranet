@@ -29,6 +29,9 @@ import model.Message;
 
 import view.AllChat;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Class Discussion handles the messages received by the user.
  * @see Message
@@ -37,7 +40,8 @@ import view.AllChat;
  * @see JTextPane
  */
 public class Discussion extends JTextPane implements Runnable {
-
+    
+    private static final Logger log = LogManager.getLogger();
     private AllChat allChat;
     private Socket socket;
     private PrintWriter flowExit;
@@ -60,6 +64,7 @@ public class Discussion extends JTextPane implements Runnable {
     public Discussion(InformationsServer infos, AllChat od, Language language) {
         this.language = language;
         this.setSize(new Dimension(450, 300));
+        log.info("Creation of a discussion");
         doc = (StyledDocument) this.getDocument();
         this.allChat = od;
         this.setEditable(false);
@@ -82,7 +87,7 @@ public class Discussion extends JTextPane implements Runnable {
         //creation of the tcp socket and the communication with the server
         try {
             socket = new Socket(infos.getAdrdess(), infos.getPort());
-            send(new Message(Message.NEW_USER, null, od.getAlias(), null));
+            sendMessage(new Message(Message.NEW_USER, null, od.getAlias(), null));
             insertLine(language.getValue("WELCOME_MESSAGE"), this.infos, true);
             allChat.setVisibleWindow();
         } catch (IOException e) {
@@ -90,7 +95,7 @@ public class Discussion extends JTextPane implements Runnable {
                                           language.getValue("SERVER_NO_REPLY"), JOptionPane.ERROR_MESSAGE);
             insertLine(language.getValue("CONNEXION_FINISHED"), error, false);
             exit = true;
-            od.exit();
+            od.quit();
         }
     }
 
@@ -120,7 +125,9 @@ public class Discussion extends JTextPane implements Runnable {
 
     public void handleMessage(Message m) {
         int typeOfMessage = m.getType();
-
+        
+        log.info("Message received of type : "+ typeOfMessage);
+        
         if (typeOfMessage == Message.MESSAGE) {
             if (m.getSender().equals(allChat.getAliasLabel().getText())) {
                 insertLine(m.getSender(), myAlias, true);
@@ -161,13 +168,15 @@ public class Discussion extends JTextPane implements Runnable {
      * Method which sends a message to the server
      * @param message
      */
-    public void send(Message message) {
+    public void sendMessage(Message message) {
         try {
             flowExit = new PrintWriter(socket.getOutputStream());
+            log.info("Sending a message");
             String s = aes.encrypt(message.toString(), 1);
             flowExit.println(s);
             flowExit.flush();
         } catch (Exception e) {
+            log.error("ERROR SENDING MESSAGE "+e);
             insertLine(language.getValue("ERROR_SENDING_MESSAGE"), error, false);
         }
     }
@@ -175,8 +184,9 @@ public class Discussion extends JTextPane implements Runnable {
     /**
      * Method which sends an exit message to the server
      */
-    public void exit() {
-        this.send(new Message(3, null, allChat.getAlias(), null));
+    public void quit() {
+        log.info("quit discussion");
+        this.sendMessage(new Message(3, null, allChat.getAlias(), null));
         exit = true;
     }
 

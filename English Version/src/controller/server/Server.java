@@ -1,9 +1,6 @@
 package controller.server;
 
 
-import model.InformationsServer;
-import model.Message;
-
 import java.io.IOException;
 
 import java.net.InetAddress;
@@ -12,11 +9,19 @@ import java.net.Socket;
 
 import java.util.concurrent.TimeUnit;
 
+import model.InformationsServer;
+import model.Message;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
- * Class server receives messages from different users and asssigns to a new user 
+ * Class server receives messages from different users and asssigns to a new user
  * and object of class Client.java
  */
 public class Server implements Runnable {
+    
+    private static final Logger log = LogManager.getLogger();
     
     private boolean disconnect = false;
     private Client[] clients;
@@ -43,6 +48,7 @@ public class Server implements Runnable {
         else {
             this.size = size;
         }
+        log.info(type +" server "+name+" is created");
         clients = new Client[this.size];
         this.name = name;
         this.type = type;
@@ -68,13 +74,13 @@ public class Server implements Runnable {
             try {
                 addClient(socketserver.accept());
             } catch (IOException e) {
-                System.out.println("e2.1");
+                log.error("Error on adding a client");
             }
         }
         try {
             socketserver.close();
         } catch (IOException e) {
-            System.out.println("e2.2");
+            log.error("Error when closing the server socket");
         }
     }
 
@@ -184,7 +190,7 @@ public class Server implements Runnable {
         return infos;
     }
 
-    public String getNom() {
+    public String getName() {
         return name;
     }
 

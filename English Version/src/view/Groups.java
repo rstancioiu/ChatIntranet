@@ -2,7 +2,6 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -15,9 +14,13 @@ import javax.swing.JTabbedPane;
 
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class Groups extends JFrame {
     
+    private static final Logger log = LogManager.getLogger();
     private JTabbedPane tabs = new JTabbedPane();
     private Window window;
     private ArrayList<AllChat> tabDiscussions = new ArrayList<AllChat>();
@@ -50,7 +53,7 @@ public class Groups extends JFrame {
         tabs.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                this_windowClosing(e);
+                windowClosingEvent(e);
             }
         });
     }
@@ -62,9 +65,11 @@ public class Groups extends JFrame {
             tabDiscussions.add(((AllChat) panel));
             tabs.addTab(((AllChat) panel).getNameDiscussion(), panel);
             tabs.setSelectedIndex(tabs.getTabCount() - 1);
+            log.info("A public tab added");
         } else if (panel instanceof PrivateChat) {
             tabs.addTab("#" + ((PrivateChat) panel).getSender(), panel);
             tabs.setSelectedIndex(tabs.getTabCount() - 1);
+            log.info("A private tab added");
         }
     }
 
@@ -76,27 +81,29 @@ public class Groups extends JFrame {
         return window;
     }
 
-    private void this_windowClosing(WindowEvent e) {
+    private void windowClosingEvent(WindowEvent e) {
         int choix =
             JOptionPane.showConfirmDialog(null, language.getValue("LEAVE_GROUP"), language.getValue("QUIT"),
                                           JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (choix == JOptionPane.YES_OPTION) {
             for (int i = 0; i < tabDiscussions.size(); i++) {
-                tabDiscussions.get(i).exit();
+                tabDiscussions.get(i).quit();
                 if (tabDiscussions.get(i) != null) {
                     if(tabDiscussions.get(i).getServer()!=null) {
                         tabDiscussions.get(i).getServer().stopServer();
                     }
                 }
             }
+            log.info("Window of groups is closing");
            close();
         }
         else
         {
             for (int i = 0; i < tabDiscussions.size(); i++) {
-                tabDiscussions.get(i).exit();
+                tabDiscussions.get(i).quit();
             }
             window.setNoGroup();
+            log.info("Window of groups is closing");
         }
     }
     

@@ -2,11 +2,6 @@ package controller.client;
 
 import controller.server.Server;
 
-import model.InformationsServer;
-
-import view.Window;
-import view.ServerList;
-
 import java.io.IOException;
 
 import java.net.DatagramPacket;
@@ -20,6 +15,13 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.JList;
 
 import model.Aes;
+import model.InformationsServer;
+
+import view.ServerList;
+import view.Window;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Broadcaster class sends broadcasts and the password from the user to the server
@@ -30,6 +32,9 @@ import model.Aes;
  * @see DatagramSocket
  */
 public class Broadcaster implements Runnable {
+    
+    private static final Logger log = LogManager.getLogger();
+    private static int SIZE_MESSAGE=4096;
 
     private DatagramPacket packetBroadcast;
     private DatagramPacket packetReply;
@@ -61,6 +66,7 @@ public class Broadcaster implements Runnable {
      * @param serverList
      */
     public Broadcaster(Window window, ServerList serverList) {
+        log.info("Broadcaster created");
         this.window = window;
         try {
             data = (aes.encrypt(DISCOVERY,0)).getBytes();
@@ -74,6 +80,7 @@ public class Broadcaster implements Runnable {
             this.serverList = serverList;
             socket = new DatagramSocket();
             socket.setBroadcast(true);
+            log.info("Packet Broadcast Discovery");
             packetBroadcast =
                 new DatagramPacket(dataSent, dataSent.length, InetAddress.getByName("255.255.255.255"),
                                    Server.BROADCAST_PORT);
@@ -102,16 +109,17 @@ public class Broadcaster implements Runnable {
                     }
                 }
                 if (messageDecrypted.equals(PW_ACCEPTED)) {
+                    log.info("Message PASSWORD_ACCEPTED received");
                     acceptedConnection = true;
                     TimeUnit.MILLISECONDS.sleep(300);
                 } else {
                     infos = new InformationsServer(messageDecrypted);
+                    log.info("Informations from " + infos.getName());
                     serverList.addServer(infos);
                     acceptedConnection = false;
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("ERROR WHILE BROADCASTING");
+                log.error("ERROR WHILE BROADCASTING "+ e);
             }
         }
     }
@@ -132,11 +140,12 @@ public class Broadcaster implements Runnable {
             }
             packetPassword =
                 new DatagramPacket(dataSent, dataSent.length,
-                                   InetAddress.getByName(serverList.getAdresseByIndex(window.getIndexSelected())),
+                                   InetAddress.getByName(serverList.getAddressByIndex(window.getIndexSelected())),
                                    Server.BROADCAST_PORT);
             socket.send(packetPassword);
+            log.info("Send Password to "+ serverList.getAddressByIndex(window.getIndexSelected()));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("ERROR WHEN SENDING A PASSWORD "+ e);
         }
     }
 
@@ -147,22 +156,15 @@ public class Broadcaster implements Runnable {
     private class sendPacketBroadcast extends TimerTask {
         public void run() {
             try {
+                log.info("packet broadcast sent");
                 socket.send(packetBroadcast); // envoie de packet
             } catch (IOException e) {
                 socket.close();
-                System.out.println("Broadcast intterompu");
+                log.info("Broadcast interrupted - socket closed");
             }
         }
     }
 
-
-    public boolean isAccepted() {
-        return acceptedConnection;
-    }
-
-    public void setAcceptedConnection(boolean acceptedConnection) {
-        this.acceptedConnection = acceptedConnection;
-    }
     
     public String truncateMessage(String message) {
         String messageTruncated="";
@@ -174,7 +176,13 @@ public class Broadcaster implements Runnable {
         }
         return messageTruncated;
     }
-    
-    private static int SIZE_MESSAGE=4096;
+
+    public boolean isAccepted() {
+        return acceptedConnection;
+    }
+
+    public void setAcceptedConnection(boolean acceptedConnection) {
+        this.acceptedConnection = acceptedConnection;
+    }
 }
 

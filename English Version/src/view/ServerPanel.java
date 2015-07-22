@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,7 +14,11 @@ import javax.swing.JPanel;
 import model.InformationsServer;
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ServerPanel extends JPanel {
+    private static final Logger log = LogManager.getLogger();
     private InformationsServer info;
     private ServerList serverList;
     private JButton button;

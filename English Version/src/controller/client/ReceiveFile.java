@@ -1,13 +1,10 @@
 package controller.client;
 
-import view.PrivateChat;
-
 import java.awt.Toolkit;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.io.InputStream;
 
 import java.net.InetAddress;
@@ -19,11 +16,17 @@ import javax.swing.ProgressMonitor;
 
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import view.PrivateChat;
+
 /**
  * Class ReceiveFile receives files from an user
  */
 public class ReceiveFile implements Runnable {
 
+    private static final Logger log = LogManager.getLogger();
     private Socket socket;
     private InetAddress address;
     private int port;
@@ -48,6 +51,7 @@ public class ReceiveFile implements Runnable {
         try {
             socket = new Socket(address, port);
         } catch (IOException e) {
+            log.error("Error receiving a file");
             privateChat.insertLine(language.getValue("ERROR_SENDING_FILE"), privateChat.getTransfer(),true);
         }
     }
@@ -82,6 +86,7 @@ public class ReceiveFile implements Runnable {
             
             //partie ecrire
             bos.write(bytearray, 0, currentTotal);
+            log.info("donwload of file "+ fileName + " finished");
             bos.flush();
             bos.close();
             socket.close();
@@ -90,12 +95,13 @@ public class ReceiveFile implements Runnable {
             
             Toolkit.getDefaultToolkit().beep();
         } catch (Exception e) {
+            log.error("ERROR RECEIVING FILE");
             privateChat.insertLine(language.getValue("ERROR_SENDING_FILE"),
                              privateChat.getTransfer(),true);
             try {
                 socket.close();
             } catch (IOException ioe) {
-                System.out.println("It's impossible to close the socket");
+                log.error("IMPOSSIBLE TO CLOSE SOCKET",ioe);
             }
         }
     }

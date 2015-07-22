@@ -1,15 +1,11 @@
 package controller.client;
 
-import view.PrivateChat;
-
 import java.awt.Toolkit;
 
 import java.io.BufferedInputStream;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import java.io.OutputStream;
 
 import java.net.InetAddress;
@@ -20,11 +16,17 @@ import java.util.concurrent.TimeUnit;
 
 import model.Language;
 
+import view.PrivateChat;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Class SendFile sends the user's file to another user.
  */
 public class SendFile implements Runnable {
     
+    private static final Logger log = LogManager.getLogger();
     private Socket socket;
     private ServerSocket server;
     private InetAddress address;
@@ -43,7 +45,9 @@ public class SendFile implements Runnable {
             server = new ServerSocket(0, 0, InetAddress.getLocalHost());
             port = server.getLocalPort();
             address = server.getInetAddress();
+            log.info("sending file "+ sentFile.getName());
         } catch (IOException e) {
+            log.error("CONNEXION IMPOSSIBLE");
             privateChat.insertLine(language.getValue("CONNEXION_IMPOSSIBLE"),privateChat.getTransfer(),true);
         }
     }
@@ -64,15 +68,17 @@ public class SendFile implements Runnable {
             privateChat.insertLine(language.getValue("DOWNDLOAD_OF")+" "+sentFile.getName()+language.getValue("FINISHED"),
                                    privateChat.getTransfer(),true);
             Toolkit.getDefaultToolkit().beep();
+            log.info("download of "+sentFile.getName() +" finished");
 
         } catch (Exception e) {
+            log.error("ERROR SENDING FILE",e);
             privateChat.insertLine(language.getValue("ERROR_SENDING_FILE"),
                              privateChat.getTransfer(),true);
         }
         try {
             socket.close();
         } catch (IOException ioe) {
-            System.out.println("Impossible to close the socket");
+            log.error("IMPOSSIBLE TO CLOSE THE SOCKET",ioe);
         }
     }
     
