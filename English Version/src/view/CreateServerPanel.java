@@ -1,16 +1,16 @@
 package view;
 
 import java.awt.BorderLayout;
-
 import java.awt.Dimension;
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.awt.image.BufferedImage;
+
 import java.io.IOException;
+
 import java.text.NumberFormat;
+
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
@@ -23,8 +23,11 @@ import javax.swing.JTextField;
 
 import model.Language;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class CreateServerPanel extends JPanel {
-    
+    private static final Logger log = LogManager.getLogger();
     private JCheckBox checkbox = new JCheckBox();
     private JPasswordField serverPassword = new JPasswordField();
     private JFormattedTextField serverSize;
@@ -33,11 +36,13 @@ public class CreateServerPanel extends JPanel {
     private Language language;
 
     public CreateServerPanel(Language language) {
-        this.language=language;
+        this.language=language;  
+        log.info("Testing");
+        
         JLabel[] labels = new JLabel[4];
         labels[0] = new JLabel("");
         try {
-            BufferedImage myPicture = ImageIO.read(this.getClass().getClassLoader().getResource("server.png"));
+            BufferedImage myPicture = ImageIO.read(this.getClass().getClassLoader().getResource("resources/server.png"));
             labels[0] = new JLabel(new ImageIcon(myPicture));
         }catch (IOException e) {
             System.out.println("Image error");
@@ -52,19 +57,19 @@ public class CreateServerPanel extends JPanel {
         serverSize.setPreferredSize(new Dimension(80,20));
         serverPassword.setPreferredSize(new Dimension(80,20));
         serverSize.setText("25");
-        labels[1] = new JLabel(language.getValue("NAME")+"           :");
-        labels[2] = new JLabel(language.getValue("SIZE")+"              :");
-        labels[3] = new JLabel(language.getValue("PASSWORD")+"  :");
+        labels[1] = new JLabel(language.getValue("NAME"));
+        labels[2] = new JLabel(language.getValue("SIZE"));
+        labels[3] = new JLabel(language.getValue("PASSWORD"));
         JPanel panel0= new JPanel();
-        panel0.add(labels[0]);
+        panel0.add(labels[0],BorderLayout.EAST);
         JPanel panel1 = new JPanel(new GridLayout(1,3));
-        panel1.add(labels[1]);
+        panel1.add(labels[1],BorderLayout.EAST);
         panel1.add(serverName);
         JPanel panel2 = new JPanel(new GridLayout(1,3));
-        panel2.add(labels[2]);
+        panel2.add(labels[2],BorderLayout.EAST);
         panel2.add(serverSize);
         JPanel panel3 = new JPanel(new GridLayout(1,3));
-        panel3.add(labels[3]);
+        panel3.add(labels[3],BorderLayout.EAST);
         panel3.add(serverPassword);
         panel3.add(checkbox);
         JPanel panel4 = new JPanel(new BorderLayout());
@@ -114,4 +119,5 @@ public class CreateServerPanel extends JPanel {
     public String getPassword() {
         return (new String(serverPassword.getPassword()));
     }
+    
 }

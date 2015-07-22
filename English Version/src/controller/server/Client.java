@@ -40,34 +40,7 @@ public class Client implements Runnable {
                 String s = flowIncomming.readLine();
                 if (s != null) {
                     s = aes.decrypt(s, 1);
-                    Message message = new Message(s);
-                    if (message.getType() == Message.MESSAGE) {
-                        server.sendToAll(message, null);
-                    }
-                    else if (message.getType() == Message.NEW_USER) {
-                        name = message.getSender();
-                        boolean aliasTaken = false;
-                        while (server.contains(this)) {
-                            name = name + "_";
-                            aliasTaken = true;
-                        }
-                        server.sendToAll(new Message(Message.NEW_USER, "nouveau", name, null), this);
-                        server.sendList(this);
-                        TimeUnit.MILLISECONDS.sleep(200);
-                        if (aliasTaken)
-                            sendMessage(new Message(Message.NEW_USER, "pseudo", name, null));
-                    }
-                    else if (message.getType() == Message.EXIT) {
-                        server.sendToAll(new Message(3, null, name, null), null);
-                        server.deleteClient(this);
-                        running = false;
-                    } else if (message.getType() == Message.PRIVATE_MESSAGE) {
-                        server.sendPrivateMessage(message);
-                    } else if (message.getType() == Message.SEND_FILE) {
-                        server.sendPrivateMessage(message);
-                    } else if (message.getType() == Message.FILE_CANCELLED) {
-                        server.sendPrivateMessage(message);
-                    }
+                    answerMessage(s);
                 }
             }
             socket.close();
@@ -76,11 +49,53 @@ public class Client implements Runnable {
             running = false;
         }
     }
+    public void answerMessage(String s) {
+        Message message = new Message(s);
+        int typeOfMessage = message.getType();
+        
+        switch(typeOfMessage) {
+            case Message.MESSAGE:
+                server.sendToAll(message, null);
+                break;
+        
+            case Message.NEW_USER:
+                name = message.getSender();
+                while (server.contains(this)) {
+                    name = name + "_";
+                }
+                server.sendToAll(new Message(Message.NEW_USER, "new", name, null), this);
+                server.sendList(this);
+                sendMessage(new Message(Message.NEW_USER, "pseudo", name, null));
+                break;
+        
+            case Message.EXIT: 
+                server.sendToAll(new Message(3, null, name, null), null);
+                server.deleteClient(this);
+                running = false;
+                break;
+        
+            case Message.PRIVATE_MESSAGE:
+                server.sendPrivateMessage(message);
+                break;
+        
+            case Message.SEND_FILE:
+                server.sendPrivateMessage(message);
+                break;
+        
+            case Message.FILE_CANCELLED:
+                server.sendPrivateMessage(message);
+                break;
+        
+            default:
+                break;
+        }
+    }
 
     public void sendMessage(Message message) {
         try {
-            flowExit = new PrintWriter(socket.getOutputStream());
             String s=aes.encrypt(message.toString(), 1);
+            
+            flowExit = new PrintWriter(socket.getOutputStream());
             flowExit.println(s);
             flowExit.flush();
             } catch (Exception e) {

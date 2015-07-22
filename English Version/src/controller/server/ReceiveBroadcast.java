@@ -1,8 +1,6 @@
 package controller.server;
 
 
-import model.InformationsServer;
-
 import java.io.IOException;
 
 import java.net.DatagramPacket;
@@ -10,6 +8,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import model.Aes;
+import model.InformationsServer;
 
 /**
  * Class ReceiveBroadcast replies to the broadcasts sent by the different users.
@@ -21,7 +20,7 @@ public class ReceiveBroadcast implements Runnable {
     private DatagramPacket packetReplyInfos; 
     private DatagramPacket packetReceived;
     
-    private byte[] dataReceived = new byte[4096];
+    private byte[] dataReceived = new byte[SIZE_MESSAGE];
     private InformationsServer infos;
     private InetAddress clientAddress;
     private String password;
@@ -62,9 +61,9 @@ public class ReceiveBroadcast implements Runnable {
                 if (messageReceived.equals(password + "~~") &&
                     infos.getType() == "prive") {
                     String messageSent=aes.encrypt(PW_ACCEPTED,0);
-                    byte[] dataSent = new byte[4096];
+                    byte[] dataSent = new byte[SIZE_MESSAGE];
                     byte[] message = messageSent.getBytes();
-                    for(int i=0;i<4096;++i){
+                    for(int i=0;i<SIZE_MESSAGE;++i){
                         if(i<message.length)
                             dataSent[i]=message[i];
                         else dataSent[i]=0;
@@ -75,9 +74,9 @@ public class ReceiveBroadcast implements Runnable {
                     socketUdp.send(packetReplyPassword);
                 } else if (messageReceived.equals(DISCOVERY)) {
                     String messageSent=aes.encrypt((infos.sendData()),0);
-                    byte[] dataSent = new byte[4096];
+                    byte[] dataSent = new byte[SIZE_MESSAGE];
                     byte[] message = messageSent.getBytes();
-                    for(int i=0;i<4096;++i){
+                    for(int i=0;i<SIZE_MESSAGE;++i){
                         if(i<message.length)
                             dataSent[i]=message[i];
                         else dataSent[i]=0;
@@ -105,4 +104,6 @@ public class ReceiveBroadcast implements Runnable {
     public void setInfos(InformationsServer infos) {
         this.infos = infos;
     }
+    
+    private static int SIZE_MESSAGE=4096;
 }

@@ -1,12 +1,6 @@
 package controller.client;
 
-import model.InformationsServer;
-import model.Message;
-
-import view.AllChat;
-
 import java.awt.Color;
-
 import java.awt.Dimension;
 
 import java.io.BufferedReader;
@@ -28,10 +22,12 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import javax.xml.crypto.Data;
-
 import model.Aes;
+import model.InformationsServer;
 import model.Language;
+import model.Message;
+
+import view.AllChat;
 
 /**
  * Class Discussion handles the messages received by the user.
@@ -82,9 +78,8 @@ public class Discussion extends JTextPane implements Runnable {
         StyleConstants.setFontSize(myAlias, 13);
         StyleConstants.setFontSize(error, 14);
         this.infos = this.addStyle("", null);
-        /*
-         * creation de la liaison tcp et communication avec la classe Serveur
-         */
+        
+        //creation of the tcp socket and the communication with the server
         try {
             socket = new Socket(infos.getAdrdess(), infos.getPort());
             send(new Message(Message.NEW_USER, null, od.getAlias(), null));
@@ -107,41 +102,7 @@ public class Discussion extends JTextPane implements Runnable {
                 if (s != null) {
                     s = aes.decrypt(s, 1);
                     message = new Message(s);
-                    if (message.getType() == Message.MESSAGE) {
-                        if (message.getSender().equals(allChat.getAliasLabel().getText())) {
-                            insertLine(message.getSender(), myAlias, true);
-                        } else {
-                            insertLine(message.getSender(), alias, true);
-                        }
-                        insertLine(" : " + message.getBody(), body, false);
-                        allChat.scrollDown();
-                    } else if (message.getType() == Message.NEW_USER) {
-
-                        if (message.getBody().equals("nouveau")) {
-                            model.addElement(message.getSender());
-                            insertLine(message.getSender() + " " + language.getValue("JUST_CONNECTED"), infos, true);
-                            allChat.scrollDown();
-                        } else if (message.getBody().equals("pseudo")) {
-                            insertLine(language.getValue("ALIAS") + " \"" + allChat.getAliasLabel().getText() +
-                                       language.getValue("ALIAS_CHOSEN") + message.getSender() + " !", infos, true);
-                            allChat.setAliasLabel(message.getSender());
-                        } else
-                            model.addElement(message.getSender());
-                    } else if (message.getType() == Message.EXIT) {
-                        model.removeElement(message.getSender());
-                        insertLine(message.getSender() + " " + language.getValue("LEAVE_GROUP"), infos, true);
-                        allChat.scrollDown();
-                    } else if (message.getType() == Message.PRIVATE_MESSAGE) {
-                        allChat.updatePrivateDiscussion(message);
-                    } else if (message.getType() == Message.HOST_EXIT) {
-                        insertLine(language.getValue("HOST_LEAVE_GROUP"), error, true);
-                        JOptionPane.showMessageDialog(null,
-                                                      language.getValue("HOST_STOP") + " '" +
-                                                      allChat.getNameDiscussion() + "'", ":'(",
-                                                      JOptionPane.ERROR_MESSAGE);
-                    } else if (message.getType() == Message.SEND_FILE || message.getType() == Message.FILE_CANCELLED) {
-                        allChat.updatePrivateDiscussion(message);
-                    }
+                    handleMessage(message);
                 }
             } catch (Exception e) {
                 insertLine(language.getValue("ERROR_DISCONNECTED"), error, true);
@@ -157,8 +118,47 @@ public class Discussion extends JTextPane implements Runnable {
         }
     }
 
+    public void handleMessage(Message m) {
+        int typeOfMessage = m.getType();
+
+        if (typeOfMessage == Message.MESSAGE) {
+            if (m.getSender().equals(allChat.getAliasLabel().getText())) {
+                insertLine(m.getSender(), myAlias, true);
+            } else {
+                insertLine(m.getSender(), alias, true);
+            }
+            insertLine(" : " + m.getBody(), body, false);
+            allChat.scrollDown();
+        } else if (typeOfMessage == Message.NEW_USER) {
+            String sender = m.getSender();
+            if (m.getBody().equals("new")) {
+                model.addElement(sender);
+                insertLine(sender + " " + language.getValue("JUST_CONNECTED"), infos, true);
+                allChat.scrollDown();
+            } else if (m.getBody().equals("pseudo")) {
+                insertLine(language.getValue("ALIAS") + " \"" + allChat.getAliasLabel().getText() + " " +
+                           language.getValue("ALIAS_CHOSEN") + sender + " !", infos, true);
+                allChat.setAliasLabel(sender);
+            } else
+                model.addElement(sender);
+        } else if (typeOfMessage == Message.EXIT) {
+            String sender = m.getSender();
+            model.removeElement(sender);
+            insertLine(sender + " " + language.getValue("LEAVE_GROUP"), infos, true);
+            allChat.scrollDown();
+        } else if (typeOfMessage == Message.HOST_EXIT) {
+            insertLine(language.getValue("HOST_LEAVE_GROUP"), error, true);
+            JOptionPane.showMessageDialog(null,
+                                          language.getValue("HOST_STOP") + " '" + allChat.getNameDiscussion() + "'",
+                                          ":'(", JOptionPane.ERROR_MESSAGE);
+        } else if (typeOfMessage == Message.SEND_FILE || typeOfMessage == Message.FILE_CANCELLED ||
+                   typeOfMessage == Message.PRIVATE_MESSAGE) {
+            allChat.updatePrivateDiscussion(m);
+        }
+    }
+
     /**
-     * Methode which sends a message to the server
+     * Method which sends a message to the server
      * @param message
      */
     public void send(Message message) {

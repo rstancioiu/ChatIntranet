@@ -3,10 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
 import java.awt.image.BufferedImage;
-
-import java.io.File;
 
 import java.io.IOException;
 
@@ -40,7 +37,7 @@ public class LoginPanel extends JPanel {
         
         try {
         
-            BufferedImage myPicture = ImageIO.read(this.getClass().getClassLoader().getResource("user.png"));
+            BufferedImage myPicture = ImageIO.read(this.getClass().getClassLoader().getResource("resources/user.png"));
             picLabel = new JLabel(new ImageIcon(myPicture));
             this.add(picLabel);
         }catch (IOException e) {
@@ -56,10 +53,10 @@ public class LoginPanel extends JPanel {
         splitPane.setResizeWeight(0.8);
         add(splitPane, BorderLayout.CENTER);
         splitPane.setContinuousLayout(true);
-        jLabel1.setText(language.getValue("ALIAS")+" : ");
+        jLabel1.setText(language.getValue("ALIAS"));
         jLabel1.setLabelFor(userName);
         userName.setPreferredSize(new Dimension(80, 20));
-        jLabel2.setText(language.getValue("PASSWORD")+" :");
+        jLabel2.setText(language.getValue("PASSWORD"));
         password.setPreferredSize(new Dimension(80, 20));
         jPanel2.add(jLabel1, BorderLayout.WEST);
         jPanel2.add(userName, BorderLayout.CENTER);

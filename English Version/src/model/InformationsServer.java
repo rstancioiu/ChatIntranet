@@ -102,32 +102,6 @@ public class InformationsServer {
             return false;
     }
 
-    public String toString() {
-        String s = name;
-        if (name.length() > 30) {
-            s = name.substring(0, 27) + "...";
-
-        } else {
-            s = name;
-            for (int i = 0; i < 30 - s.length(); i++) {
-                s = s + " ";
-            }
-        }
-        String result="";
-        result+=s;
-        for(int i=0;i<30;++i)
-            result+=" ";
-        result+="(" + clients + "/" + clientsMax + ")";
-        for(int i=0;i<15;++i)
-            result+=" ";
-        result+=type;
-        for(int i=0;i<30;++i)
-            result+=" ";
-        result+="Host : " + host;
-
-        return result;
-    }
-
     public String sendData() {
         return name + '~' + address + '~' + port + '~' + clients + '~' + clientsMax + '~' + host + '~' + type + "~~";
     }

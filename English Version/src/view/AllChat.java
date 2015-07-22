@@ -1,17 +1,9 @@
 package view;
 
-import controller.client.Broadcaster;
-import controller.server.Client;
 import controller.client.Discussion;
-import controller.client.SendFile;
-import controller.server.ReceiveBroadcast;
-import controller.client.ReceiveFile;
+
 import controller.server.Server;
 
-import model.InformationsServer;
-import model.Message;
-
-//dsadsa
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -22,8 +14,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.InputMap;
@@ -39,10 +32,15 @@ import javax.swing.ScrollPaneConstants;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import javax.swing.SwingUtilities;
 
+import model.InformationsServer;
 import model.Language;
+import model.Message;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AllChat extends JPanel {
-    
+    private static final Logger log = LogManager.getLogger();
     private JPanel top = new JPanel();
     private JPanel bottom = new JPanel();
     private JPanel panel1 = new JPanel();
@@ -57,12 +55,12 @@ public class AllChat extends JPanel {
     private String alias;
     private ArrayList<String> privateDiscussions = new ArrayList<String>();
     private ArrayList<PrivateChat> listPrivateDiscussions = new ArrayList<PrivateChat>();
-    private InformationsServer infos;
     
     private Discussion discussion;
     private Groups groups;
-    private Server server;
+    private InformationsServer infos;
     private Language language;
+    private Server server;
    
     public AllChat(String alias, InformationsServer infos, Groups groups, Server server,Language language) {
         this.language=language;
@@ -71,7 +69,9 @@ public class AllChat extends JPanel {
         this.infos = infos;
         this.server = server;
         this.groups = groups;
-
+        
+        log.info("Testing");
+        
         discussion = new Discussion(infos, this,language);
         Thread threadprincipal = new Thread(discussion);
         threadprincipal.start();
@@ -195,6 +195,7 @@ public class AllChat extends JPanel {
             discussion.exit();
         } catch (NullPointerException e) {
             groups.getTabs().remove(this);
+            log.error("Error on quitting",e);
         }
         groups.getTabs().remove(this);
         if(groups.getTabs().getTabCount()==0)
